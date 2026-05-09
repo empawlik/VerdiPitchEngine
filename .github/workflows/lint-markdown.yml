@@ -1,0 +1,18 @@
+name: "Markdown Lint (Central)"
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  call-central-linter:
+    uses: AIgorLabs/.github/.github/workflows/reusable-lint-markdown.yml@main
+    secrets: inherit
+
+  lint-1000-keys:
+    name: lint-1000-keys
+    needs: call-central-linter
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Centralized linter passed!"
