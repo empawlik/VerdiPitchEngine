@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# commit-msg hook to enforce 020-GIT mathematical commit structures
+
+COMMIT_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_FILE")
+
+# 1. Check for Conventional Commit header
+if ! echo "$COMMIT_MSG" | head -n1 | grep -qE "^(feat|fix|docs|style|refactor|test|chore|ci|perf)(\([a-zA-Z0-9_-]+\))?: .+"; then
+    echo "Error: Commit message header does not follow conventional commits (Rule 020-GIT)."
+    echo "Expected format: type(scope): subject"
+    exit 1
+fi
+
+# 2. Check for Task-ID
+if ! echo "$COMMIT_MSG" | grep -qE "^Task-ID: (CTX|LTS)-[0-9]+"; then
+    echo "Error: Commit message is missing valid Task-ID (e.g., Task-ID: CTX-00001 or LTS-10001)."
+    exit 1
+fi
+
+# 3. Check for Ref-Rule (if applicable to Antigravity rules)
+if ! echo "$COMMIT_MSG" | grep -qE "^Ref-Rule: [0-9]+-[A-Z]+"; then
+    echo "Warning: Commit message is missing Ref-Rule (e.g., Ref-Rule: 020-GIT). Please ensure this is intentional."
+fi
+
+exit 0
