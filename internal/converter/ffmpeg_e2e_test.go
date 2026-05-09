@@ -10,14 +10,11 @@ import (
 	"github.com/empawlik/verdi-pitch-engine/internal/fs"
 )
 
-// setupSyntheticAudio creates a 440 Hz sine wave tone as a FLAC file.
-func hasRubberband() bool {
-	cmd := exec.Command("ffmpeg", "-filters")
-	output, err := cmd.Output()
-	if err != nil {
-		return false
-	}
-	return bytes.Contains(output, []byte("rubberband"))
+// hasFFmpeg checks if ffmpeg is available in the path.
+func hasFFmpeg() bool {
+	cmd := exec.Command("ffmpeg", "-version")
+	err := cmd.Run()
+	return err == nil
 }
 
 func setupSyntheticAudio(t *testing.T, outPath string) {
@@ -56,8 +53,8 @@ func TestE2EFFmpegPitchShift(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping E2E test in short mode")
 	}
-	if !hasRubberband() {
-		t.Skip("ffmpeg does not have rubberband filter compiled in, skipping E2E test")
+	if !hasFFmpeg() {
+		t.Skip("ffmpeg is not available in path, skipping E2E test")
 	}
 
 	// Create a temporary directory for isolation
