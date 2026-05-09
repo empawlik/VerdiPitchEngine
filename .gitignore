@@ -1,0 +1,46 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+
+# Test output and coverage files
+*.test
+*.out
+coverage.out
+coverage.html
+
+# Go workspace
+go.work
+go.work.sum
+
+# Vendor dependencies
+vendor/
+
+# Environment and Secrets
+.env
+.env.*
+*.local
+secrets/
+keys/
+
+# Antigravity / Gemini Agent
+.agent/tmp/
+.agent/scratch/
+.gemini/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS-specific
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*

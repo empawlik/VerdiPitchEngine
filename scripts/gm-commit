@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+# Antigravity Git Commit Wrapper
+# Executes the commit using the pending draft in the secure temp sandbox
+
+if [ ! -f ".agent/tmp/pending_commit.txt" ]; then
+    echo "Error: .agent/tmp/pending_commit.txt not found!"
+    exit 1
+fi
+
+echo "Finalizing commit..."
+git commit -S -F .agent/tmp/pending_commit.txt
