@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-09
-body_hash: db3375c4b1c43d0b
+body_hash: d1359ed49e115ecf
 tags: [dev-asset, docs]
 ---
 
@@ -28,3 +28,5 @@ tags: [dev-asset, docs]
 - [ ] **VPE-004** [#4]: NAS I/O Optimization (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-005** [#9]: Containerized E2E Runner (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-006** [#10]: Spectral Analysis Validation (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-008** [#14]: Dynamic Pitch-Shift Strategy Selection (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-009** [#15]: Post-Processing Fidelity Validation (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
