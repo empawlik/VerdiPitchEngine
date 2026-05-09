@@ -122,3 +122,33 @@ func TestGetBitDepth(t *testing.T) {
 		t.Errorf("Expected 0 depth for missing file, got %d", depth)
 	}
 }
+
+func TestGetDuration(t *testing.T) {
+	cmd := exec.Command("ffprobe", "-version")
+	if err := cmd.Run(); err != nil {
+		t.Skip("Skipping TestGetDuration: ffprobe not found")
+	}
+
+	tempDir := t.TempDir()
+	inputFlac := filepath.Join(tempDir, "tone.flac")
+	setupSyntheticAudio(t, inputFlac)
+
+	duration, err := getDuration(inputFlac)
+	if err != nil {
+		t.Fatalf("getDuration failed: %v", err)
+	}
+
+	// Synthetic tone is 1 second
+	if duration < 0.9 || duration > 1.1 {
+		t.Errorf("Expected duration ~1.0, got %f", duration)
+	}
+
+	// Test missing file fallback
+	duration, err = getDuration(filepath.Join(tempDir, "missing.flac"))
+	if err == nil {
+		t.Errorf("Expected error for missing file, got nil")
+	}
+	if duration != 0 {
+		t.Errorf("Expected 0 duration for missing file, got %f", duration)
+	}
+}
