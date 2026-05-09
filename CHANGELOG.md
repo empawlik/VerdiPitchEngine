@@ -42,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * **chore**: Update README.md
 
 ### Fixed
+* [chore(000-workspace): add release.sh to fix github action...](https://github.com/empawlik/VerdiPitchEngine/commit/3beeec06eacda8cfc81fd2049b1ef4bdb971b915)
+  * **chore(000-workspace)**: add release.sh to fix github action pipeline (Ref-Rule: 000-workspace, Task-ID: VPE-007)
 * [fix(025-changelog): initialize changelog and base tag](https://github.com/empawlik/VerdiPitchEngine/commit/629fa5dc630dd338961f58714d8e4f270e3f4e88)
   * **fix(025-changelog)**: initialize changelog and base tag (Ref-Rule: 025-CHANGELOG, Task-ID: VPE-001)
 * [fix(000-workspace): resolve unknown target errors in CI w...](https://github.com/empawlik/VerdiPitchEngine/commit/15f9970e96c6eb4fd32d3e3d50a87aff9d8dd9cd)
