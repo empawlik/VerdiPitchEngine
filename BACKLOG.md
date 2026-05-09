@@ -12,14 +12,14 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-09
-body_hash: 4fc2fa38c4266e27
+body_hash: 19982daf8ee06443
 tags: [dev-asset, docs]
 ---
 
 # VerdiPitchEngine Backlog
 
 ## Active Tasks
-- [ ] **VPE-002** [#2]: E2E FFmpeg Integration Tests (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:in-progress #priority:high
+- None currently
 
 ## Icebox
 
