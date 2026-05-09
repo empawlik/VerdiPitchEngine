@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+* [feat(engine): implement librubberband TSM and container o...](https://github.com/empawlik/VerdiPitchEngine/commit/c90498ffe63b6fe0dd78953039da3f4704cf47bc)
+  * **feat(engine)**: implement librubberband TSM and container orchestration (Ref-Rule: 100-CORE, Task-ID: VPE-007)
+* [refactor(VPE-007): implement asetrate optimizations and z...](https://github.com/empawlik/VerdiPitchEngine/commit/50881618e4ce696cda710adc0510a73d4b80c1f0)
+  * **refactor(VPE-007)**: implement asetrate optimizations and zero-trust deployment (Ref-Rule: 1000, Task-ID: VPE-007)
 * [feat(core): initialize VerdiPitchEngine workspace with Go...](https://github.com/empawlik/VerdiPitchEngine/commit/c6744793eef814ee4264d00efbe189dd0e238eba)
   * **feat(core)**: initialize VerdiPitchEngine workspace with Go pipeline and Antigravity standards (Ref-Rule: 100-CORE, Task-ID: TASK-001)
 * [test(converter): implement end-to-end ffmpeg pitch shift ...](https://github.com/empawlik/VerdiPitchEngine/commit/15cd97aadf5e46c7b44fa2d6c58e3bc3aa7b3ef9)
@@ -20,10 +24,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * **docs(task-validate)**: validate VPE-002 and transition to active backlog (Task-ID: VPE-002)
 * [docs(055-gap-analysis-output): generate explorative task ...](https://github.com/empawlik/VerdiPitchEngine/commit/21bd8b72c79a8b068bbcfe30cf725bf593f6d020)
   * **docs(055-gap-analysis-output)**: generate explorative task post-mortem for VPE-001 (Ref-Rule: 055-gap-analysis-output, Task-ID: VPE-001)
+* [test(converter): extract buildFFmpegArgs to increase test...](https://github.com/empawlik/VerdiPitchEngine/commit/7cf16b7d5cfae90fd404bfc452779d7f7ed6c982)
+  * **test(converter)**: extract buildFFmpegArgs to increase test coverage (Task-ID: VPE-007)
 * [chore(025-changelog): add automated release note generati...](https://github.com/empawlik/VerdiPitchEngine/commit/9d9809a31e6a1c19ec613ae5dd168dd84504af0e)
   * **chore(025-changelog)**: add automated release note generation workflow (Ref-Rule: 025-changelog)
 * [chore(000-workspace): replicate core CI/CD workflows from...](https://github.com/empawlik/VerdiPitchEngine/commit/272e4de540afbe628aeb87a6f7a08c952c117c55)
   * **chore(000-workspace)**: replicate core CI/CD workflows from Cortex (Ref-Rule: 000-workspace)
+* [docs(055-postmortem): generate VPE-007 explorative task p...](https://github.com/empawlik/VerdiPitchEngine/commit/18dc9731d0755b213ea17a5c048afe5db58ab5b9)
+  * **docs(055-postmortem)**: generate VPE-007 explorative task post-mortem (Ref-Rule: 055-DOCS, Task-ID: VPE-007)
+* [docs(050-formalization): formalize VPE-007 documentation ...](https://github.com/empawlik/VerdiPitchEngine/commit/acae4f7c05ca6caffc5e79d28702191e6cd6e313)
+  * **docs(050-formalization)**: formalize VPE-007 documentation and runbooks (Ref-Rule: 050-DOCS, Task-ID: VPE-007)
 * [docs(VPE-002): finalize task formalization and metadata u...](https://github.com/empawlik/VerdiPitchEngine/commit/2b43d76a5f950bb1d17c0912f982b00fa11854f9)
   * **docs(VPE-002)**: finalize task formalization and metadata updates (Task-ID: VPE-002)
 * [docs(050-docs): formalize VPE-001 task completion and gen...](https://github.com/empawlik/VerdiPitchEngine/commit/aaeffe4e84bbf98f3cf55e5df7c7bef0574f708e)
