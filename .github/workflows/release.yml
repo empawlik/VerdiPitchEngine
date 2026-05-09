@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Necessary for git describe and logs
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26'
+          check-latest: true
+
+      - name: Install Mage
+        run: go install github.com/magefile/mage@latest
+
+      - name: Run checks
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mage check
+
+
+      - name: Build binaries
+        run: mage build
+
+      - name: Extract Release Notes
+        id: extract_notes
+        run: |
+          VERSION=${GITHUB_REF_NAME}
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            # If manual, try to find latest tag
+            VERSION=$(git describe --tags --abbrev=0)
+          fi
+          ./scripts/release.sh $VERSION
+          
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          body_path: RELEASE_NOTES.md
+          files: |
+            bin/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
