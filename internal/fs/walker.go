@@ -2,6 +2,7 @@ package fs
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -27,24 +28,37 @@ func WalkAndCollect(inDir, outDir string) ([]Task, error) {
 			return nil
 		}
 
-		if strings.ToLower(filepath.Ext(path)) == ".flac" {
-			relPath, err := filepath.Rel(inDir, path)
-			if err != nil {
-				return fmt.Errorf("failed to get relative path for %s: %w", path, err)
-			}
+		ext := strings.ToLower(filepath.Ext(path))
+		relPath, err := filepath.Rel(inDir, path)
+		if err != nil {
+			return fmt.Errorf("failed to get relative path for %s: %w", path, err)
+		}
 
-			outPath := filepath.Join(outDir, relPath)
-			outDirPath := filepath.Dir(outPath)
+		outPath := filepath.Join(outDir, relPath)
+		outDirPath := filepath.Dir(outPath)
 
-			// Create the target directory structure
-			if err := os.MkdirAll(outDirPath, 0755); err != nil {
-				return fmt.Errorf("failed to create directory %s: %w", outDirPath, err)
-			}
+		// Create the target directory structure
+		if err := os.MkdirAll(outDirPath, 0755); err != nil {
+			return fmt.Errorf("failed to create directory %s: %w", outDirPath, err)
+		}
 
+		if ext == ".flac" {
 			tasks = append(tasks, Task{
 				InputPath:  path,
 				OutputPath: outPath,
 			})
+		} else {
+			// Copy non-FLAC files (e.g., folder.jpg, cover.png, .pdf) natively
+			inF, err := os.Open(path)
+			if err == nil {
+				defer inF.Close()
+				outF, err := os.Create(outPath)
+				if err == nil {
+					defer outF.Close()
+					// Use io.Copy to handle potentially large PDFs or images efficiently
+					_, _ = io.Copy(outF, inF)
+				}
+			}
 		}
 		return nil
 	})

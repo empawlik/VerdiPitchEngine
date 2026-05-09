@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  verdi-pitch-engine:
+    image: empawlik/verdi-pitch-engine:latest
+    container_name: verdi-pitch-engine-app
+    # Keeps the container sleeping in the background and prints instructions to the logs
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        echo '==================================================='
+        echo '🎵 VerdiPitchEngine Container Station Hub 🎵'
+        echo '==================================================='
+        echo 'The engine is standing by in interactive mode.'
+        echo 'To process an album:'
+        echo '  1. Click the [>_ Execute] terminal icon'
+        echo '  2. Run: verdi-process "/music/Artist/Album"'
+        echo '==================================================='
+        tail -f /dev/null
+    volumes:
+      # Mount the entire QNAP music library
+      - /share/Multimedia/Audio/Music:/music
+    environment:
+      - TZ=America/New_York
+      - VERDI_WORKERS=4
+    restart: unless-stopped

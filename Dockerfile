@@ -20,14 +20,18 @@ FROM ubuntu:22.04
 # Avoid tzdata interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install ffmpeg with librubberband support
+# Install ffmpeg with librubberband support and flac for metadata tagging
 RUN apt-get update && \
-    apt-get install -y ffmpeg && \
+    apt-get install -y ffmpeg flac && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy the binary from the builder stage
 COPY --from=builder /go/bin/verdi-pitch-engine /usr/local/bin/verdi-pitch-engine
+
+# Copy the orchestration wrapper script
+COPY scripts/verdi-process.sh /usr/local/bin/verdi-process
+RUN chmod +x /usr/local/bin/verdi-process
 
 # Default environment variables for worker count and paths
 ENV VERDI_WORKERS=4
