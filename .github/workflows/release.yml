@@ -29,6 +29,9 @@ jobs:
       - name: Install Mage
         run: go install github.com/magefile/mage@latest
 
+      - name: Install golangci-lint
+        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.8
+
       - name: Run checks
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
