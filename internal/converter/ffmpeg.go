@@ -35,11 +35,7 @@ func getBitDepth(filePath string) (int, error) {
 }
 
 // ProcessFile invokes FFmpeg to pitch-shift the input FLAC file to the output FLAC file.
-func ProcessFile(inPath, outPath string) error {
-	depth, _ := getBitDepth(inPath)
-
-	// High-fidelity Time-Scale Modification (TSM) pitch-shift using librubberband.
-	// This preserves the exact track duration (tempo) while shifting pitch from 440 Hz to 432 Hz.
+func buildFFmpegArgs(inPath, outPath string, depth int) []string {
 	pitchRatio := float64(432) / float64(440)
 	filter := fmt.Sprintf("rubberband=pitch=%f", pitchRatio)
 
@@ -66,6 +62,16 @@ func ProcessFile(inPath, outPath string) error {
 	}
 
 	args = append(args, "-compression_level", "12", outPath)
+	return args
+}
+
+// ProcessFile invokes FFmpeg to pitch-shift the input FLAC file to the output FLAC file.
+func ProcessFile(inPath, outPath string) error {
+	depth, _ := getBitDepth(inPath)
+
+	// High-fidelity Time-Scale Modification (TSM) pitch-shift using librubberband.
+	// This preserves the exact track duration (tempo) while shifting pitch from 440 Hz to 432 Hz.
+	args := buildFFmpegArgs(inPath, outPath, depth)
 
 	cmd := exec.Command("ffmpeg", args...)
 
