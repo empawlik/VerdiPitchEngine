@@ -30,6 +30,7 @@ var Aliases = map[string]interface{}{
 	"ci-test":        CiTest,
 	"check-coverage": CheckCoverage,
 	"check":          Check,
+	"deps":           Deps,
 }
 
 var (
@@ -144,6 +145,12 @@ body_hash: %s`, dateStr, dateStr, bodyHash)
 	}
 	fmt.Println("Markdown fixing complete!")
 	return nil
+}
+
+// Deps installs project dependencies.
+func Deps() error {
+	fmt.Println("Installing dependencies...")
+	return sh.RunV(Go, "mod", "download")
 }
 
 // Fmt formats code.

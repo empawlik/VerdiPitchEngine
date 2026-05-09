@@ -65,6 +65,6 @@ jobs:
           fi
 
       - name: Run checks
-        run: mage ci-check
+        run: mage check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
