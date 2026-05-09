@@ -32,6 +32,7 @@ var Aliases = map[string]interface{}{
 	"check":          Check,
 	"deps":           Deps,
 	"deploy":         Deploy,
+	"build":          Build,
 }
 
 var (
@@ -261,5 +262,19 @@ func Deploy() error {
 	}
 	
 	fmt.Printf("\n✨ \033[1;32mDEPLOYMENT COMPLETE\033[0m ✨\n\n")
+	return nil
+}
+
+// Build compiles the project.
+func Build() error {
+	fmt.Println("Building binaries...")
+	err := os.MkdirAll("bin", 0755)
+	if err != nil {
+		return err
+	}
+	if err := sh.RunV(Go, "build", "-o", "bin/verdi", "./cmd/verdi"); err != nil {
+		return err
+	}
+	fmt.Println("Build complete!")
 	return nil
 }
