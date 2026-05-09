@@ -13,7 +13,7 @@ dependencies: []
 created: 2026-05-09
 updated: 2026-05-09
 tags: [audio, dsp]
-body_hash: 0fafdebae186e1da
+body_hash: 5cb9f212ab9b30f8
 ---
 # Verdi Pitch Engine
 
@@ -35,6 +35,8 @@ In high-end residential audio environments (Roon, BluOS, Plex), applying real-ti
 * **Native Roon Integration:** Injects the official `VERSION=432 Hz` Vorbis metadata tag natively into both the new and original files. Roon will recognize the pitch-shifted tracks as a distinct release edition and explicitly badge the album in its UI!
 * **Automated Sidecar Migration:** Seamlessly detects and duplicates all non-FLAC sidecar assets (like `.lrc` synced lyrics, `.pdf` digital booklets, and `.jpg` album covers) from the 440 Hz backup into the new 432 Hz output directory, guaranteeing a flawless presentation in your digital library.
 * **Topology Aware (Recursive):** Recursively scans the source directory. You can point the engine at a single Album folder, an Artist root folder, or your entire Music library; it will perfectly replicate your nested hierarchy in the destination directory.
+* **Real-Time CLI Progress Visualization:** Employs the `mpb/v8` multi-progress bar library to give you rich, terminal-based feedback. The CLI explicitly displays global batch completion percentage alongside real-time microsecond-level progression for each individual active worker thread.
+* **Contextual Execution Safety:** To protect your enterprise NAS from catastrophic hang-states during large directory conversions, each lossless track conversion is wrapped in a strict 15-minute `context.WithTimeout` termination bound, ensuring silent `ffmpeg` execution failures or edge-case corrupted inputs never indefinitely deadlock the main execution pool.
 
 ### Hardware Requirements
 - QNAP, Synology, or Unraid NAS capable of running Docker containers.
