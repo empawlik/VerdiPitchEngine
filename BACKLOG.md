@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-09
-body_hash: 19dac499c79d8e93
+body_hash: db3375c4b1c43d0b
 tags: [dev-asset, docs]
 ---
 
@@ -24,6 +24,7 @@ tags: [dev-asset, docs]
 ## Icebox
 
 ### Unsorted Operations
-- [ ] **VPE-002** [#2]: E2E FFmpeg Integration Tests (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:brainstorm #priority:high
 - [ ] **VPE-003** [#3]: OpenBrain Telemetry Subsystem (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-004** [#4]: NAS I/O Optimization (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-005** [#9]: Containerized E2E Runner (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-006** [#10]: Spectral Analysis Validation (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
