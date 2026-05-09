@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-09
-body_hash: e0c209b2b798f8c6
+body_hash: 652d1bec8a29e8f0
 tags: [dev-asset, docs, completed-tasks]
 ---
 
@@ -29,3 +29,8 @@ tags: [dev-asset, docs, completed-tasks]
 - **Status:** Completed
 - **Description:** Establish a true E2E pipeline processing a real `tone.flac` to verify 432 Hz output bit-perfect transformation.
 - **GitHub Issue:** #2
+
+### [x] VPE-007: Refactor pitch engine to use pure math asetrate and audiophile optimizations
+- **Status:** Completed
+- **Description:** Migrated the core pitch-shifting engine from legacy ffmpeg filters to librubberband for high-fidelity, duration-preserving Time-Scale Modification. Implemented dynamic 24-bit audio preservation and native sidecar asset migration. Added a robust Container Station CLI wrapper with interactive dashboarding and auto-pathing for QNAP environments.
+- **GitHub Issue:** #13

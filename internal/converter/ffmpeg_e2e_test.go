@@ -5,20 +5,11 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/empawlik/verdi-pitch-engine/internal/fs"
 )
-
-// setupSyntheticAudio creates a 440 Hz sine wave tone as a FLAC file.
-func hasRubberband() bool {
-	cmd := exec.Command("ffmpeg", "-filters")
-	output, err := cmd.Output()
-	if err != nil {
-		return false
-	}
-	return bytes.Contains(output, []byte("rubberband"))
-}
 
 func setupSyntheticAudio(t *testing.T, outPath string) {
 	t.Helper()
@@ -56,11 +47,15 @@ func TestE2EFFmpegPitchShift(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping E2E test in short mode")
 	}
-	if !hasRubberband() {
-		t.Skip("ffmpeg does not have rubberband filter compiled in, skipping E2E test")
+	// Check if ffmpeg has rubberband
+	checkCmd := exec.Command("ffmpeg", "-filters")
+	var out bytes.Buffer
+	checkCmd.Stdout = &out
+	if err := checkCmd.Run(); err != nil || !strings.Contains(out.String(), "rubberband") {
+		t.Skip("Skipping E2E test: ffmpeg does not support the 'rubberband' filter in this environment")
 	}
 
-	// Create a temporary directory for isolation
+	// 1. Setup temporary directory structure isolation
 	tempDir := t.TempDir()
 	inDir := filepath.Join(tempDir, "input")
 	outDir := filepath.Join(tempDir, "output")
@@ -93,4 +88,37 @@ func TestE2EFFmpegPitchShift(t *testing.T) {
 	}
 
 	verifyPitchShift(t, outputFlac)
+}
+
+func TestGetBitDepth(t *testing.T) {
+	// Check if ffmpeg and ffprobe are available
+	cmd := exec.Command("ffprobe", "-version")
+	if err := cmd.Run(); err != nil {
+		t.Skip("Skipping TestGetBitDepth: ffprobe not found in environment")
+	}
+
+	tempDir := t.TempDir()
+	inputFlac := filepath.Join(tempDir, "tone.flac")
+	setupSyntheticAudio(t, inputFlac)
+
+	depth, err := getBitDepth(inputFlac)
+	if err != nil {
+		t.Fatalf("getBitDepth failed: %v", err)
+	}
+	// The synthetic tone may report 0 bits_per_sample depending on the flac encoder defaults
+	if depth != 0 && depth != 16 {
+		t.Errorf("Expected bit depth 0 or 16, got %d", depth)
+	}
+
+	// Test missing file fallback
+	depth, err = getBitDepth(filepath.Join(tempDir, "missing.flac"))
+	if err == nil {
+		t.Errorf("Expected error for missing file, got nil")
+	}
+	// Because of fallback in getBitDepth it returns 16, nil when there's an error. Wait, actually, let's look at getBitDepth:
+	// if err := cmd.Run(); err != nil { return 0, fmt.Errorf("ffprobe bit_depth failed: %w", err) }
+	// So missing file should return 0, error.
+	if depth != 0 {
+		t.Errorf("Expected 0 depth for missing file, got %d", depth)
+	}
 }

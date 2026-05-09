@@ -13,7 +13,7 @@ dependencies: []
 created: 2026-05-09
 updated: 2026-05-09
 tags: [audio, dsp]
-body_hash: cea26119fe66e4c6
+body_hash: 1941013757dcb036
 ---
 # Verdi Pitch Engine Runbook
 
@@ -50,15 +50,26 @@ Available targets:
 
 ## Deployment
 
-The application is deployed via Docker, commonly on QNAP or Synology NAS environments.
+The application is deployed via Docker, commonly on QNAP or Synology NAS environments. The engine now utilizes a `docker-compose.yml` file to initialize an interactive Container Station environment.
 
 ```bash
 docker build -t empawlik/verdi-pitch-engine:latest .
+docker-compose up -d
+```
+### Dynamic Target Deployment
 
-docker run -d \
-  --name verdi-pitch-engine \
-  -v /share/DataVol1/Music:/music_in:ro \
-  -v /share/DataVol1/Music_432:/music_out:rw \
-  -e VERDI_WORKERS=4 \
-  empawlik/verdi-pitch-engine:latest
+You can specify a custom NAS directory to process instead of the default `/share/DataVol1/Music` by setting the `VERDI_TARGET_DIR` environment variable before running `mage deploy`.
+
+If you only specify the target directory (In-Place Mode), the system will automatically rename your target directory to `[440 Hz]` and output the newly pitch-shifted files into a freshly created folder with the `[432 Hz]` suffix!
+
+```bash
+# In-Place Mode: Will rename the album folder to "The North Borders [440 Hz]" and output to "The North Borders [432 Hz]"
+VERDI_TARGET_DIR="/share/DataVol1/Music/The North Borders" mage deploy
+```
+
+You can optionally override both the input and output directories:
+
+```bash
+# Explicit Output Mode
+VERDI_TARGET_DIR="/share/DataVol1/Music_New" VERDI_OUT_DIR="/share/DataVol1/Music_New_432" mage deploy
 ```

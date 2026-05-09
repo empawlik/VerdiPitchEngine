@@ -13,37 +13,58 @@ dependencies: []
 created: 2026-05-09
 updated: 2026-05-09
 tags: [audio, dsp]
-body_hash: 4f2adedd0181e4b5
+body_hash: 0fafdebae186e1da
 ---
 # Verdi Pitch Engine
 
 **Verdi Pitch Engine** is a containerized batch-conversion utility designed to run directly on enterprise NAS hardware (QNAP/Synology/Unraid). It processes lossless audio libraries, mathematically shifting them from standard 440 Hz tuning down to 432 Hz (-31.76 cents).
 
+### Why 432 Hz? (Verdi's A)
+The engine is named in honor of the Italian composer **Giuseppe Verdi**, who strongly advocated for the 432 Hz tuning standard (historically known as "Verdi's A"). According to widespread acoustic theories—and some popular conspiracy theories regarding the standardization of 440 Hz in the 20th century—440 Hz is considered unnaturally dissonant to human biology and consciousness. In contrast, 432 Hz is believed to be mathematically consistent with the patterns of the universe, resonating organically with human biophysics, the golden ratio, and the natural world. This engine seeks to restore digital music libraries to this natural, harmonious state.
+
 ### Architectural Motivation
 In high-end residential audio environments (Roon, BluOS, Plex), applying real-time 432 Hz DSP introduces network latency, consumes continuous Roon Core CPU cycles, and often requires expensive proprietary hardware to mitigate electrical noise (e.g., 432 EVO). 
 
-*Verdi Pitch Engine* solves this through **Data Gravity**—moving the compute to the storage. By utilizing a transient Docker container running `ffmpeg` and the `librubberband` audio filter directly on the NAS, we pre-compute the acoustic math and save it to disk.
+*Verdi Pitch Engine* solves this through **Data Gravity**—moving the compute to the storage. By utilizing a persistent Docker container running native `ffmpeg` filters (`rubberband` Time-Scale Modification) directly on the NAS, we pre-compute the acoustic math and save it to disk. The container acts as a batch processing service, preserving zero-trust computing rules while maximizing NAS resources.
 
 ### Core Features
+* **High-Fidelity TSM (Time-Scale Modification):** Replaces legacy resampling techniques with `librubberband`, executing duration-preserving pitch shifting. Tracks are lowered to 432 Hz without altering their original tempo or acoustic timing.
+* **Dynamic Bit-Depth & Sample Rate Preservation:** The engine mathematically detects the original bit depth and sample rate. High-resolution studio masters (e.g., 24-bit/96kHz, 192kHz) are natively preserved without downsampling, ensuring Audiophile-grade precision isn't crushed to standard 16-bit/44.1kHz during processing.
+* **MQA Purification:** Master Quality Authenticated (MQA) files rely on proprietary, fragile high-frequency data folding embedded in the 24-bit noise floor. Time-scale modification fundamentally recalculates the waveform, naturally destroying the proprietary MQA layer. The engine outputs a pure, standard 24-bit 432 Hz FLAC, effectively freeing your music from MQA lock-in and hardware decoding requirements.
 * **Zero Real-Time Overhead:** FLAC files are pre-processed, allowing network endpoints (Buchardt, BluOS, Denon) to stream them bit-perfectly without real-time DSP jitter.
-* **Bit-Perfect Metadata:** Ensures high-resolution album art, Roon tags, and ReplayGain data are flawlessly cloned to the output files.
-* **Non-Destructive:** Mounts the source directory as Read-Only (`:ro`), making it structurally impossible to corrupt your original 440 Hz library.
-* **Topology Aware:** Recursively scans the source directory and perfectly replicates your Artist/Album folder tree in the destination directory.
+* **Native Roon Integration:** Injects the official `VERSION=432 Hz` Vorbis metadata tag natively into both the new and original files. Roon will recognize the pitch-shifted tracks as a distinct release edition and explicitly badge the album in its UI!
+* **Automated Sidecar Migration:** Seamlessly detects and duplicates all non-FLAC sidecar assets (like `.lrc` synced lyrics, `.pdf` digital booklets, and `.jpg` album covers) from the 440 Hz backup into the new 432 Hz output directory, guaranteeing a flawless presentation in your digital library.
+* **Topology Aware (Recursive):** Recursively scans the source directory. You can point the engine at a single Album folder, an Artist root folder, or your entire Music library; it will perfectly replicate your nested hierarchy in the destination directory.
 
 ### Hardware Requirements
 - QNAP, Synology, or Unraid NAS capable of running Docker containers.
 - Multi-core CPU recommended (Intel x86_64 architecture preferred). Default processing utilizes 4 workers.
 
-### Execution
-Run the following `docker run` command, explicitly mapping your source and destination directories.
+### Execution & Deployment
 
-**CRITICAL:** Ensure the input directory is mounted as Read-Only (`:ro`) to prevent any accidental library corruption.
+Deploy the engine via the Antigravity Mage pipeline to your NAS infrastructure. Once deployed as a persistent container, you interact with it directly through your NAS Container Station terminal via the interactive `verdi-process` CLI dashboard.
 
+#### 1. Deployment
+Deploy the container to your remote QNAP/NAS host:
 ```bash
-docker run -d \
-  --name verdi-pitch-engine \
-  -v /share/DataVol1/Music:/music_in:ro \
-  -v /share/DataVol1/Music_432:/music_out:rw \
-  -e VERDI_WORKERS=4 \
-  empawlik/verdi-pitch-engine:latest
+mage deploy
 ```
+
+#### 2. Processing via Container Station
+Open the **Execute** terminal for the `verdi-pitch-engine` container inside your NAS UI and use the interactive dashboard.
+
+You can provide full QNAP absolute paths:
+```bash
+verdi-process "/share/Multimedia/Audio/Music/Artist/Nightmares on Wax/Smokers Delight"
+```
+
+Or utilize the ultra-fast relative pathing (automatically maps to your music root):
+```bash
+verdi-process "Artist/Nightmares on Wax/Smokers Delight"
+```
+
+The orchestration wrapper will:
+1. Backup your master files to an appended `[440 Hz]` directory.
+2. Enforce the `440 Hz` version tag on the master tracks.
+3. Perform duration-preserving 432 Hz pitch shifting via the Go engine.
+4. Auto-migrate your cover art, PDFs, and lyrics files to the newly minted `[432 Hz]` directory.

@@ -31,6 +31,7 @@ var Aliases = map[string]interface{}{
 	"check-coverage": CheckCoverage,
 	"check":          Check,
 	"deps":           Deps,
+	"deploy":         Deploy,
 }
 
 var (
@@ -230,4 +231,35 @@ func CheckCoverage() error {
 // Check runs all checks (format, vet, lint, vulncheck, check-coverage).
 func Check() {
 	mg.Deps(Fmt, Vet, Lint, LintMarkdown, Vulncheck, CheckCoverage)
+}
+
+// Deploy deploys current workspace to QNAP Container Station.
+// You can pass a specific NAS target directory via VERDI_TARGET_DIR environment variable.
+func Deploy() error {
+	fmt.Printf("\n🚀 \033[1;35mINITIATING ZERO-TRUST QNAP SYNCHRONIZATION\033[0m 🚀\n")
+	fmt.Printf("\033[1;30m------------------------------------------------\033[0m\n")
+	fmt.Printf("📦 \033[1;34mSyncing VerdiPitchEngine to Remote Enclave Mirror...\033[0m\n")
+	
+	targetDir := os.Getenv("VERDI_TARGET_DIR")
+	
+	rsyncCmd := `rsync -az --progress --chmod=a+rx -e "ssh -i ~/.ssh/id_ed25519_antigravity" --exclude='.git' --exclude='bin' . antigravity_agent@$(grep '^QNAP_HOST=' ../OpenBrain/.env | cut -d'"' -f2):/share/AIgorLabs/enclaves/VerdiPitchEngine/`
+	if err := sh.RunV("bash", "-c", rsyncCmd); err != nil {
+		return err
+	}
+	
+	fmt.Printf("🔄 \033[1;34mRestarting VerdiPitchEngine container via Zero-Trust Proxy...\033[0m\n")
+	
+	var deployArg string
+	if targetDir != "" {
+		fmt.Printf("📂 \033[1;36mTarget NAS Directory Override:\033[0m %s\n", targetDir)
+		deployArg = " " + targetDir
+	}
+
+	sshCmd := fmt.Sprintf(`ssh -i ~/.ssh/id_ed25519_antigravity antigravity_agent@$(grep '^QNAP_HOST=' ../OpenBrain/.env | cut -d'"' -f2) "deploy verdipitchengine%s"`, deployArg)
+	if err := sh.RunV("bash", "-c", sshCmd); err != nil {
+		return err
+	}
+	
+	fmt.Printf("\n✨ \033[1;32mDEPLOYMENT COMPLETE\033[0m ✨\n\n")
+	return nil
 }

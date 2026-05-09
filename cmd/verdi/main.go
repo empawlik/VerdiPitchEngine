@@ -20,16 +20,27 @@ func main() {
 	flag.StringVar(&outDir, "out", "/music_out", "Output directory for pitch-shifted files")
 	flag.Parse()
 
-	// Optionally override via environment variables if set
-	if envWorkers := os.Getenv("VERDI_WORKERS"); envWorkers != "" {
+	// Check if specific flags were explicitly provided on the CLI
+	isFlagPassed := func(name string) bool {
+		found := false
+		flag.Visit(func(f *flag.Flag) {
+			if f.Name == name {
+				found = true
+			}
+		})
+		return found
+	}
+
+	// Optionally override via environment variables if set and flag was not explicitly provided
+	if envWorkers := os.Getenv("VERDI_WORKERS"); envWorkers != "" && !isFlagPassed("workers") {
 		if _, err := fmt.Sscanf(envWorkers, "%d", &workers); err != nil {
 			log.Printf("Warning: failed to parse VERDI_WORKERS: %v", err)
 		}
 	}
-	if envIn := os.Getenv("VERDI_IN"); envIn != "" {
+	if envIn := os.Getenv("VERDI_IN"); envIn != "" && !isFlagPassed("in") {
 		inDir = envIn
 	}
-	if envOut := os.Getenv("VERDI_OUT"); envOut != "" {
+	if envOut := os.Getenv("VERDI_OUT"); envOut != "" && !isFlagPassed("out") {
 		outDir = envOut
 	}
 
