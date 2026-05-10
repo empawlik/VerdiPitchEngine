@@ -191,6 +191,11 @@ func ProcessFile(ctx context.Context, inPath, outPath string, bar *mpb.Bar) erro
 		return fmt.Errorf("failed to rename tmp file: %w", err)
 	}
 
+	// Preserve original timestamps to prevent media scanners (e.g., Roon) from treating the file as "Newly Added"
+	if info, err := os.Stat(inPath); err == nil {
+		_ = os.Chtimes(outPath, info.ModTime(), info.ModTime())
+	}
+
 	if bar != nil && totalMicrosec > 0 {
 		bar.SetCurrent(totalMicrosec)
 	}

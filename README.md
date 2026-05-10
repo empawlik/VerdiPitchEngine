@@ -13,7 +13,7 @@ dependencies: []
 created: 2026-05-09
 updated: 2026-05-09
 tags: [audio, dsp]
-body_hash: 888901202fa31a17
+body_hash: bdf648e196080624
 ---
 # Verdi Pitch Engine
 
@@ -32,8 +32,9 @@ In high-end residential audio environments (Roon, BluOS, Plex), applying real-ti
 * **Dynamic Bit-Depth & Sample Rate Preservation:** The engine mathematically detects the original bit depth and sample rate. High-resolution studio masters (e.g., 24-bit/96kHz, 192kHz) are natively preserved without downsampling, ensuring Audiophile-grade precision isn't crushed to standard 16-bit/44.1kHz during processing.
 * **MQA Purification:** Master Quality Authenticated (MQA) files rely on proprietary, fragile high-frequency data folding embedded in the 24-bit noise floor. Time-scale modification fundamentally recalculates the waveform, naturally destroying the proprietary MQA layer. The engine outputs a pure, standard 24-bit 432 Hz FLAC, effectively freeing your music from MQA lock-in and hardware decoding requirements.
 * **Zero Real-Time Overhead:** FLAC files are pre-processed, allowing network endpoints (Buchardt, BluOS, Denon) to stream them bit-perfectly without real-time DSP jitter.
+* **In-Place Roon Preservation:** Replaces original audio files in-place and hides the 440 Hz backups behind dot-prefixed directories. The system natively clones exact filesystem timestamps (`ModTime`, `AccessTime`), ensuring Roon flawlessly maintains your playlists, favorites, and true "Date Added" metrics without seeing annoying duplicate albums.
 * **Native Roon Integration:** Injects the official `VERSION=432 Hz` Vorbis metadata tag natively into both the new and original files. Roon will recognize the pitch-shifted tracks as a distinct release edition and explicitly badge the album in its UI!
-* **Automated Sidecar Migration:** Seamlessly detects and duplicates all non-FLAC sidecar assets (like `.lrc` synced lyrics, `.pdf` digital booklets, and `.jpg` album covers) from the 440 Hz backup into the new 432 Hz output directory, guaranteeing a flawless presentation in your digital library.
+* **Automated Sidecar Migration:** Seamlessly detects and duplicates all non-FLAC sidecar assets (like `.lrc` synced lyrics, `.pdf` digital booklets, and `.jpg` album covers) from the hidden 440 Hz backup into the new 432 Hz output directory, guaranteeing a flawless presentation in your digital library.
 * **Topology Aware (Recursive):** Recursively scans the source directory. You can point the engine at a single Album folder, an Artist root folder, or your entire Music library; it will perfectly replicate your nested hierarchy in the destination directory.
 * **Real-Time CLI Progress Visualization:** Employs the `mpb/v8` multi-progress bar library to give you rich, terminal-based feedback. The CLI explicitly displays global batch completion percentage alongside real-time microsecond-level progression for each individual active worker thread.
 * **Contextual Execution Safety:** To protect your enterprise NAS from catastrophic hang-states during large directory conversions, each lossless track conversion is wrapped in a strict 15-minute `context.WithTimeout` termination bound, ensuring silent `ffmpeg` execution failures or edge-case corrupted inputs never indefinitely deadlock the main execution pool.
@@ -66,10 +67,11 @@ verdi-process "Artist/Nightmares on Wax/Smokers Delight"
 ```
 
 The orchestration wrapper will:
-1. Backup your master files to an appended `[440 Hz]` directory.
-2. Enforce the `440 Hz` version tag on the master tracks.
-3. Perform duration-preserving 432 Hz pitch shifting via the Go engine.
-4. Auto-migrate your cover art, PDFs, and lyrics files to the newly minted `[432 Hz]` directory.
+1. Move your original 440 Hz master files into a hidden backup directory (e.g., `.` prefix).
+2. Enforce the `440 Hz` version tag on the master backup tracks.
+3. Perform duration-preserving 432 Hz pitch shifting via the Go engine directly into the original directory path.
+4. Auto-migrate your cover art, PDFs, and lyrics files to the new 432 Hz output.
+5. Clone the exact filesystem timestamps (ModTime/AccessTime) from the original directory to ensure Roon retains all playlists and "Date Added" flags without recognizing duplicates.
 
 #### 3. Headless Batch Execution
 If you want to process massive chunks of your library in an automated queue, use the new `verdi-batch` orchestration script.
@@ -80,7 +82,7 @@ verdi-batch "Artist" 10
 
 The batch engine will natively:
 * Scan the `Artist` directory for unprocessed FLAC albums.
-* Filter out and strictly ignore albums that have already generated a `[432 Hz]` target or are already tagged as `[440 Hz]`.
+* Filter out and strictly ignore albums that already possess a hidden `[440 Hz]` backup folder.
 * Sort the pending list alphabetically.
 * Process the top 10 pending albums sequentially.
 

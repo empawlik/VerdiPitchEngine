@@ -45,8 +45,10 @@ fi
 ALBUM_NAME=$(basename "$TARGET_DIR")
 
 ORIGINAL_DIR="$TARGET_DIR"
-TARGET_DIR_440="${ORIGINAL_DIR} [440 Hz]"
-TARGET_DIR_432="${ORIGINAL_DIR} [432 Hz]"
+# Hide the 440 Hz backup so Roon ignores it to prevent duplicates
+TARGET_DIR_440="$(dirname "$TARGET_DIR")/.$(basename "$TARGET_DIR") [440 Hz]"
+# Output directly back into the exact original path to retain Roon database entries (favorites, playlists)
+TARGET_DIR_432="$ORIGINAL_DIR"
 
 if [ ! -d "$ORIGINAL_DIR" ] && [ ! -d "$TARGET_DIR_440" ]; then
     echo -e "${C_YELLOW}❌ Error: Directory not found: ${ORIGINAL_DIR} (nor its 440 Hz backup)${C_DEF}"
@@ -87,9 +89,18 @@ echo -e "${C_DIM}------------------------------------------------${C_DEF}"
 echo -e "\n🖼️  ${C_BLUE}Step 5: Migrating Sidecar Metadata (Art, Lyrics, PDFs)...${C_DEF}"
 (
     cd "$TARGET_DIR_440" || exit
-    # Find all non-FLAC files and copy them to the 432 Hz directory, preserving folder structure
-    find . -type f ! -iname "*.flac" -exec cp --parents "{}" "$TARGET_DIR_432/" \;
+    # Find all non-FLAC files and copy them to the 432 Hz directory, preserving timestamps and folder structure
+    find . -type f ! -iname "*.flac" -exec cp -p --parents "{}" "$TARGET_DIR_432/" \;
 )
 echo -e "   ${C_GREEN}✔ Sidecar migration complete.${C_DEF}"
+
+echo -e "\n🕰️  ${C_BLUE}Step 6: Synchronizing Directory Timestamps...${C_DEF}"
+find "$TARGET_DIR_440" -type d | while read -r dir; do
+    rel_dir="${dir#$TARGET_DIR_440}"
+    if [ -d "$TARGET_DIR_432$rel_dir" ]; then
+        touch -r "$dir" "$TARGET_DIR_432$rel_dir"
+    fi
+done
+echo -e "   ${C_GREEN}✔ Original timestamps preserved to prevent Roon 'Recent' flagging.${C_DEF}"
 
 echo -e "\n✨ ${C_GREEN}PROCESSING COMPLETE FOR: ${ALBUM_NAME}${C_DEF} ✨\n"

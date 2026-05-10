@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-09
-body_hash: 4a41558cc437af81
+body_hash: 809812ddfb28e9df
 tags: [dev-asset, docs, completed-tasks]
 ---
 
@@ -39,3 +39,8 @@ tags: [dev-asset, docs, completed-tasks]
 - **Status:** Completed
 - **Description:** Implement real-time progress bars for file processing and prevent invisible hangs during long-running tasks.
 - **GitHub Issue:** #20
+
+### [x] VPE-013: Roon Metadata In-Place Preservation
+- **Status:** Completed
+- **Description:** Shifted from side-by-side folder structure to a hidden-backup & in-place update architecture, natively copying filesystem timestamps (`ModTime`, `AccessTime`) to preserve Roon metadata and database links.
+- **GitHub Issue:** #24

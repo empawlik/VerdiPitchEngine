@@ -84,8 +84,10 @@ while IFS= read -r dir; do
         continue
     fi
     
-    # Skip if the [432 Hz] target directory already exists!
-    if [ -d "${dir} [432 Hz]" ]; then
+    # Skip if the hidden [440 Hz] backup directory already exists!
+    parent_dir=$(dirname "$dir")
+    base_name=$(basename "$dir")
+    if [ -d "${parent_dir}/.${base_name} [440 Hz]" ]; then
         continue
     fi
 

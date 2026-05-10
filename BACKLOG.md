@@ -11,8 +11,8 @@ platform: "CLI"
 tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
-updated: 2026-05-09
-body_hash: a17b33423964f73c
+updated: 2026-05-10
+body_hash: 613e2ea628b374ac
 tags: [dev-asset, docs]
 ---
 
@@ -32,3 +32,5 @@ tags: [dev-asset, docs]
 - [ ] **VPE-009** [#15]: Post-Processing Fidelity Validation (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-011** [#21]: Dynamic Context Timeout Bounding (Ref: [VPE-010](.agent/docs/gap-analysis/task-post-mortem/VPE-010.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-012** [#22]: Headless / Daemon Log Redirection (Ref: [VPE-010](.agent/docs/gap-analysis/task-post-mortem/VPE-010.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-014** [#25]: Revert Operation (verdi-revert) (Ref: [VPE-013](.agent/docs/gap-analysis/task-post-mortem/VPE-013.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-015** [#26]: Prune Hidden Backups (verdi-prune) (Ref: [VPE-013](.agent/docs/gap-analysis/task-post-mortem/VPE-013.md)) #status:brainstorm #priority:medium
