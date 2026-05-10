@@ -12,7 +12,9 @@ RUN go mod download
 COPY . .
 
 # Build the application statically
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/verdi-pitch-engine ./cmd/verdi
+ARG VERSION=dev
+ARG BUILD_HASH=unknown
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s -X main.Version=${VERSION} -X main.Build=${BUILD_HASH}" -o /go/bin/verdi-pitch-engine ./cmd/verdi
 
 # Stage 2: Runtime
 FROM ubuntu:22.04

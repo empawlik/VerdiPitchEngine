@@ -243,25 +243,25 @@ func Deploy() error {
 	
 	targetDir := os.Getenv("VERDI_TARGET_DIR")
 	
+	commit, err := sh.Output("git", "rev-parse", "--short", "HEAD")
+	if err != nil {
+		commit = "latest"
+	}
+	imageTag := fmt.Sprintf("v0.3.0-%s", commit)
+	fmt.Printf("🏷️  \033[1;36mVersioning Image as:\033[0m %s\n", imageTag)
+	
+	// Write to .env to safely pass to docker-compose without violating the SSH proxy strict whitelisting
+	envContent := fmt.Sprintf("IMAGE_TAG=%s\nVERSION=0.3.0\nBUILD_HASH=%s\n", imageTag, commit)
+	if err := os.WriteFile(".env", []byte(envContent), 0644); err != nil {
+		return err
+	}
+
 	rsyncCmd := `rsync -az --progress --chmod=a+rx -e "ssh -i ~/.ssh/id_ed25519_antigravity" --exclude='.git' --exclude='bin' . antigravity_agent@$(grep '^QNAP_HOST=' ../OpenBrain/.env | cut -d'"' -f2):/share/AIgorLabs/enclaves/VerdiPitchEngine/`
 	if err := sh.RunV("bash", "-c", rsyncCmd); err != nil {
 		return err
 	}
 	
 	fmt.Printf("🔄 \033[1;34mRestarting VerdiPitchEngine container via Zero-Trust Proxy...\033[0m\n")
-	
-	commit, err := sh.Output("git", "rev-parse", "--short", "HEAD")
-	if err != nil {
-		commit = "latest"
-	}
-	imageTag := fmt.Sprintf("v0.1.0-%s", commit)
-	fmt.Printf("🏷️  \033[1;36mVersioning Image as:\033[0m %s\n", imageTag)
-	
-	// Write to .env to safely pass to docker-compose without violating the SSH proxy strict whitelisting
-	envContent := fmt.Sprintf("IMAGE_TAG=%s\n", imageTag)
-	if err := os.WriteFile(".env", []byte(envContent), 0644); err != nil {
-		return err
-	}
 	
 	var deployArg string
 	if targetDir != "" {
@@ -285,7 +285,14 @@ func Build() error {
 	if err != nil {
 		return err
 	}
-	if err := sh.RunV(Go, "build", "-o", "bin/verdi", "./cmd/verdi"); err != nil {
+	commit, err := sh.Output("git", "rev-parse", "--short", "HEAD")
+	if err != nil {
+		commit = "unknown"
+	}
+
+	ldflags := fmt.Sprintf("-X main.Version=0.3.0 -X main.Build=%s", commit)
+
+	if err := sh.RunV(Go, "build", "-ldflags", ldflags, "-o", "bin/verdi", "./cmd/verdi"); err != nil {
 		return err
 	}
 	fmt.Println("Build complete!")
