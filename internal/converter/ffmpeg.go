@@ -115,9 +115,6 @@ func buildFFmpegArgs(inPath, outPath string, depth int, sampleRate string) []str
 		"-map", "0:a?",
 		"-map", "0:v?",
 		"-map_metadata", "0",
-		"-metadata", "ENCODED_BY=VerdiPitchEngine",
-		"-metadata", "PITCH_SHIFT=432Hz",
-		"-metadata", "VERSION=432 Hz",
 		"-c:a", "flac",
 		"-c:v", "copy",
 	}
@@ -136,6 +133,48 @@ func buildFFmpegArgs(inPath, outPath string, depth int, sampleRate string) []str
 
 	args = append(args, "-compression_level", "5", "-f", "flac", outPath)
 	return args
+}
+
+// inheritMetadata uses metaflac to strictly copy Vorbis comments and embedded pictures from source to destination.
+func inheritMetadata(ctx context.Context, inPath, outPath string) error {
+	// 1. Copy Vorbis comments (tags)
+	var tagData bytes.Buffer
+	exportTags := execCommandContext(ctx, "metaflac", "--export-tags-to=-", inPath)
+	exportTags.Stdout = &tagData
+	if err := exportTags.Run(); err != nil {
+		return fmt.Errorf("failed to export tags: %w", err)
+	}
+
+	importTags := execCommandContext(ctx, "metaflac", "--remove-all-tags", "--import-tags-from=-", outPath)
+	importTags.Stdin = &tagData
+	if err := importTags.Run(); err != nil {
+		return fmt.Errorf("failed to import tags: %w", err)
+	}
+
+	// 2. Set Verdi Pitch Engine custom tags
+	setTags := execCommandContext(ctx, "metaflac",
+		"--set-tag=ENCODED_BY=VerdiPitchEngine",
+		"--set-tag=PITCH_SHIFT=432Hz",
+		"--set-tag=VERSION=432 Hz",
+		outPath)
+	if err := setTags.Run(); err != nil {
+		return fmt.Errorf("failed to set custom tags: %w", err)
+	}
+
+	// 3. Strip ffmpeg-generated pictures and copy original picture block
+	removePic := execCommandContext(ctx, "metaflac", "--remove", "--block-type=PICTURE", "--dont-use-padding", outPath)
+	_ = removePic.Run() // Ignore errors if no picture exists
+
+	var picData bytes.Buffer
+	exportPic := execCommandContext(ctx, "metaflac", "--export-picture-to=-", inPath)
+	exportPic.Stdout = &picData
+	if err := exportPic.Run(); err == nil && picData.Len() > 0 {
+		importPic := execCommandContext(ctx, "metaflac", "--import-picture-from=-", outPath)
+		importPic.Stdin = &picData
+		_ = importPic.Run() // Ignore error if importing picture fails
+	}
+
+	return nil
 }
 
 // ProcessFile invokes FFmpeg to pitch-shift the input FLAC file to the output FLAC file.
@@ -186,14 +225,22 @@ func ProcessFile(ctx context.Context, inPath, outPath string, bar *mpb.Bar) erro
 		return fmt.Errorf("ffmpeg failed: %w, stderr: %s", err, stderr.String())
 	}
 
+	// Inject 1:1 metadata parity using metaflac
+	if err := inheritMetadata(ctx, inPath, tmpOutPath); err != nil {
+		os.Remove(tmpOutPath)
+		return fmt.Errorf("metadata inheritance failed: %w", err)
+	}
+
+	// Preserve original timestamps on the tmp file BEFORE renaming it.
+	// If we Chtimes after Rename, Roon's inotify watcher will scan the file the instant it is renamed
+	// and will read the new mtime before we can restore it, falsely flagging it as a "Newly Added" album.
+	if info, err := os.Stat(inPath); err == nil {
+		_ = os.Chtimes(tmpOutPath, info.ModTime(), info.ModTime())
+	}
+
 	// Atomically rename the finished tmp file to the final output name
 	if err := os.Rename(tmpOutPath, outPath); err != nil {
 		return fmt.Errorf("failed to rename tmp file: %w", err)
-	}
-
-	// Preserve original timestamps to prevent media scanners (e.g., Roon) from treating the file as "Newly Added"
-	if info, err := os.Stat(inPath); err == nil {
-		_ = os.Chtimes(outPath, info.ModTime(), info.ModTime())
 	}
 
 	if bar != nil && totalMicrosec > 0 {

@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-10
-body_hash: 9b00af9bad87dc2b
+body_hash: 10342fba37d04875
 tags: [dev-asset, docs, completed-tasks]
 ---
 
@@ -49,3 +49,8 @@ tags: [dev-asset, docs, completed-tasks]
 - **Status:** Completed
 - **Description:** Implemented persistent file logging of the batch execution summary, and secured the system by adding native process-tree verification (Roon/Plex check) directly into the interactive scripts via host PID privileges.
 - **GitHub Issue:** #31
+
+### [x] VPE-020: Metaflac Injection Pipeline
+- **Status:** Completed
+- **Description:** Shifted metadata injection from FFmpeg to `metaflac` byte-copy buffers to achieve true 1:1 metadata parity (preserving MusicBrainz tags and custom PICTURE blocks). Mitigated concurrent OS pipe deadlocks using bounded `bytes.Buffer` execution and resolved Roon's `inotify` race condition by explicitly executing `os.Chtimes` before atomic renames and across all supplemental filesystem artifacts.
+- **GitHub Issue:** #??

@@ -37,9 +37,14 @@ func WalkAndCollect(inDir, outDir string) ([]Task, error) {
 		outPath := filepath.Join(outDir, relPath)
 		outDirPath := filepath.Dir(outPath)
 
-		// Create the target directory structure
+		// Create the target directory structure and preserve its timestamps
 		if err := os.MkdirAll(outDirPath, 0755); err != nil {
 			return fmt.Errorf("failed to create directory %s: %w", outDirPath, err)
+		}
+
+		// Attempt to preserve the directory timestamp to match the input
+		if dirInfo, err := os.Stat(filepath.Dir(path)); err == nil {
+			_ = os.Chtimes(outDirPath, dirInfo.ModTime(), dirInfo.ModTime())
 		}
 
 		if ext == ".flac" {
@@ -54,9 +59,14 @@ func WalkAndCollect(inDir, outDir string) ([]Task, error) {
 				defer inF.Close()
 				outF, err := os.Create(outPath)
 				if err == nil {
-					defer outF.Close()
 					// Use io.Copy to handle potentially large PDFs or images efficiently
 					_, _ = io.Copy(outF, inF)
+					outF.Close() // Close early before Chtimes
+
+					// Preserve timestamps on non-FLAC files
+					if info, err := inF.Stat(); err == nil {
+						_ = os.Chtimes(outPath, info.ModTime(), info.ModTime())
+					}
 				}
 			}
 		}
