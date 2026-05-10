@@ -104,9 +104,50 @@ func TestHelperProcess(t *testing.T) {
 	if os.Getenv("GO_WANT_HELPER_PROCESS") != "1" {
 		return
 	}
-	// Simulated ffmpeg output
-	os.Stdout.WriteString("out_time_us=1000000\n")
+	args := os.Args
+	var cmdIndex int
+	for i, arg := range args {
+		if arg == "--" {
+			cmdIndex = i + 1
+			break
+		}
+	}
+	if cmdIndex == 0 || cmdIndex >= len(args) {
+		os.Exit(1)
+	}
+
+	command := args[cmdIndex]
+	if command == "ffprobe" {
+		for _, arg := range args[cmdIndex:] {
+			if arg == "format=duration" {
+				os.Stdout.WriteString("120.5\n")
+				os.Exit(0)
+			}
+			if arg == "stream=sample_rate" {
+				os.Stdout.WriteString("48000\n")
+				os.Exit(0)
+			}
+			if arg == "stream=bits_per_sample,bits_per_raw_sample,sample_fmt" {
+				os.Stdout.WriteString("24\n")
+				os.Exit(0)
+			}
+		}
+		os.Exit(0)
+	}
+
+	if command == "ffmpeg" {
+		os.Stdout.WriteString("out_time_us=1000000\n")
+		os.Exit(0)
+	}
 	os.Exit(0)
+}
+
+func fakeExecCommand(command string, args ...string) *exec.Cmd {
+	cs := []string{"-test.run=TestHelperProcess", "--", command}
+	cs = append(cs, args...)
+	cmd := exec.Command(os.Args[0], cs...)
+	cmd.Env = []string{"GO_WANT_HELPER_PROCESS=1"}
+	return cmd
 }
 
 func fakeExecCommandContext(ctx context.Context, command string, args ...string) *exec.Cmd {
@@ -118,10 +159,14 @@ func fakeExecCommandContext(ctx context.Context, command string, args ...string)
 }
 
 func TestProcessFile_MockedSuccess(t *testing.T) {
-	// Override the execCommandContext for this test
+	// Override the execCommands for this test
 	oldExecCommandContext := execCommandContext
 	execCommandContext = fakeExecCommandContext
 	defer func() { execCommandContext = oldExecCommandContext }()
+
+	oldExecCommand := execCommand
+	execCommand = fakeExecCommand
+	defer func() { execCommand = oldExecCommand }()
 
 	inPath := "dummy_mock_in.flac"
 	outPath := "dummy_mock_out.flac"
@@ -137,5 +182,41 @@ func TestProcessFile_MockedSuccess(t *testing.T) {
 	err := ProcessFile(context.Background(), inPath, outPath, nil)
 	if err != nil {
 		t.Errorf("Expected mocked ProcessFile to succeed, got %v", err)
+	}
+}
+
+func TestMetadataExtractors_MockedSuccess(t *testing.T) {
+	// Override the execCommand for this test
+	oldExecCommand := execCommand
+	execCommand = fakeExecCommand
+	defer func() { execCommand = oldExecCommand }()
+
+	inPath := "dummy_mock_in.flac"
+
+	// Test getBitDepth
+	depth, err := getBitDepth(inPath)
+	if err != nil {
+		t.Errorf("getBitDepth failed: %v", err)
+	}
+	if depth != 24 {
+		t.Errorf("unexpected bit depth: %d, expected 24", depth)
+	}
+
+	// Test getDuration
+	dur, err := getDuration(inPath)
+	if err != nil {
+		t.Errorf("getDuration failed: %v", err)
+	}
+	if dur != 120.5 {
+		t.Errorf("unexpected duration: %f, expected 120.5", dur)
+	}
+
+	// Test getSampleRate
+	sr, err := getSampleRate(inPath)
+	if err != nil {
+		t.Errorf("getSampleRate failed: %v", err)
+	}
+	if sr != "48000" {
+		t.Errorf("unexpected sample rate: %s, expected 48000", sr)
 	}
 }
