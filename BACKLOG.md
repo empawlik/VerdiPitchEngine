@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-10
-body_hash: 74e774d94fe92e76
+body_hash: 5490e621e02d9802
 tags: [dev-asset, docs]
 ---
 
@@ -36,3 +36,5 @@ tags: [dev-asset, docs]
 - [ ] **VPE-017** [#32]: Dynamic Process Whitelisting Configuration (Ref: [VPE-016](.agent/docs/gap-analysis/task-post-mortem/VPE-016.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-018** [#33]: Containerized Log Rotation & Pruning (Ref: [VPE-016](.agent/docs/gap-analysis/task-post-mortem/VPE-016.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-021** [#??]: Cover Art Preservation (Ref: [VPE-019](.agent/docs/gap-analysis/task-post-mortem/VPE-019.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-022** [#35]: Go-Native FLAC Parsing Migration (Ref: [VPE-020](.agent/docs/gap-analysis/task-post-mortem/VPE-020.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-023** [#36]: Zero-Copy Syscall Optimizations (Ref: [VPE-020](.agent/docs/gap-analysis/task-post-mortem/VPE-020.md)) #status:brainstorm #priority:medium
