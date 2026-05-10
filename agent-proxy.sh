@@ -117,17 +117,30 @@ case "$SSH_ORIGINAL_COMMAND" in
       fi
 
       cd /share/AIgorLabs/enclaves/VerdiPitchEngine
-      echo "🧹 Cleaning up old container..."
-      docker rm -f verdi-pitch-engine || true
-      echo "🏗️  Building image..."
-      docker build -t empawlik/verdi-pitch-engine:latest .
-      echo "🚀 Starting updated container..."
-      docker run -d \
-        --name verdi-pitch-engine \
-        -v "$TARGET_DIR:/music_in:ro" \
-        -v "$TARGET_DIR_OUT:/music_out:rw" \
-        -e VERDI_WORKERS=4 \
-        empawlik/verdi-pitch-engine:latest
+      if [ -f .env ]; then
+        source .env
+      fi
+      export IMAGE_TAG=${IMAGE_TAG:-latest}
+      
+      # Sanitize container name
+      C_NAME="verdi-pitch-engine-$IMAGE_TAG"
+      export CONTAINER_NAME=$(echo "$C_NAME" | tr -cd 'a-zA-Z0-9_-')
+      
+      export MUSIC_IN_DIR="$TARGET_DIR"
+      export MUSIC_OUT_DIR="$TARGET_DIR_OUT"
+      
+      echo "🧹 Cleaning up old containers..."
+      # Bring down any currently running composition from this directory
+      /share/CACHEDEV1_DATA/.qpkg/container-station/usr/local/lib/docker/cli-plugins/docker-compose down || true
+      
+      # Also ensure any stragglers from previous scripts are cleaned up
+      docker ps -a --format '{{.Names}}' | grep '^verdi-pitch-engine' | xargs -r docker rm -f || true
+      
+      echo "🏗️  Building image with docker-compose..."
+      /share/CACHEDEV1_DATA/.qpkg/container-station/usr/local/lib/docker/cli-plugins/docker-compose build
+      
+      echo "🚀 Starting updated container ($CONTAINER_NAME)..."
+      /share/CACHEDEV1_DATA/.qpkg/container-station/usr/local/lib/docker/cli-plugins/docker-compose up -d
     )
     ;;
   "backup mattermostbot")

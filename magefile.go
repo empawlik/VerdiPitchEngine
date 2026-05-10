@@ -250,6 +250,19 @@ func Deploy() error {
 	
 	fmt.Printf("🔄 \033[1;34mRestarting VerdiPitchEngine container via Zero-Trust Proxy...\033[0m\n")
 	
+	commit, err := sh.Output("git", "rev-parse", "--short", "HEAD")
+	if err != nil {
+		commit = "latest"
+	}
+	imageTag := fmt.Sprintf("v0.1.0-%s", commit)
+	fmt.Printf("🏷️  \033[1;36mVersioning Image as:\033[0m %s\n", imageTag)
+	
+	// Write to .env to safely pass to docker-compose without violating the SSH proxy strict whitelisting
+	envContent := fmt.Sprintf("IMAGE_TAG=%s\n", imageTag)
+	if err := os.WriteFile(".env", []byte(envContent), 0644); err != nil {
+		return err
+	}
+	
 	var deployArg string
 	if targetDir != "" {
 		fmt.Printf("📂 \033[1;36mTarget NAS Directory Override:\033[0m %s\n", targetDir)

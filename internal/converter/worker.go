@@ -56,6 +56,8 @@ func RunPool(tasks []fs.Task, numWorkers int) {
 					name = name[:17] + "..."
 				}
 
+				log.Printf("➡️  [Worker %d] Started processing: %s", workerID, name)
+
 				bar := p.AddBar(100, // placeholder, will be updated to total microseconds by ProcessFile
 					mpb.BarRemoveOnComplete(),
 					mpb.PrependDecorators(
@@ -64,7 +66,7 @@ func RunPool(tasks []fs.Task, numWorkers int) {
 					),
 					mpb.AppendDecorators(
 						decor.OnComplete(
-							decor.EwmaETA(decor.ET_STYLE_GO, 90, decor.WCSyncWidth), "done",
+							decor.Elapsed(decor.ET_STYLE_GO, decor.WCSyncSpace), "Done!",
 						),
 					),
 				)
@@ -74,12 +76,13 @@ func RunPool(tasks []fs.Task, numWorkers int) {
 
 				if err := ProcessFile(ctx, task.InputPath, task.OutputPath, bar); err != nil {
 					atomic.AddInt32(&errors, 1)
-					log.Printf("\n[Worker %d] Error processing %s: %v", workerID, task.InputPath, err)
+					log.Printf("❌ [Worker %d] Error processing %s: %v", workerID, task.InputPath, err)
 					os.Remove(task.OutputPath)
 					bar.Abort(true)
 				} else {
 					atomic.AddInt32(&processed, 1)
 					bar.SetTotal(bar.Current(), true)
+					log.Printf("✅ [Worker %d] Finished processing: %s", workerID, name)
 				}
 				cancel()
 				totalBar.Increment()

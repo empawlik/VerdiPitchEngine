@@ -1,0 +1,1 @@
+command="/share/homes/antigravity_agent/.ssh/agent-proxy.sh",no-port-forwarding,no-x11-forwarding,no-agent-forwarding ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKzFfCfSGogWXbYHP5o8Xq+UDEHxFYiaqYMhBcv6oO+ epawlik@MacBookAir.lan
