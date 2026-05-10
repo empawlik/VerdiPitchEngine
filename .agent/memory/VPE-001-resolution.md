@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: 86063ffbe9b79f33
 tags: [dev-asset, memory, technical-resolution]
 ---

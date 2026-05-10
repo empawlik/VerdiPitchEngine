@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-05-10
+
+### Added
+* [feat(orchestration): implement in-place roon metadata pre...](https://github.com/empawlik/VerdiPitchEngine/commit/fff39ce35eb0b01cf51049a46ec5d3be6e677af4)
+  * **feat(orchestration)**: implement in-place roon metadata preservation
+
+### Changed
+* [docs(architecture): formalize roon metadata preservation ...](https://github.com/empawlik/VerdiPitchEngine/commit/e34f6159dc3b4bb5dad7eb6ace3007b2a645c407)
+  * **docs(architecture)**: formalize roon metadata preservation tasks
+* [docs(architecture): generate post-mortem analysis and pop...](https://github.com/empawlik/VerdiPitchEngine/commit/530f414369bd55636d198f890c8bd56aff54972f)
+  * **docs(architecture)**: generate post-mortem analysis and populate backlog
+
 ## [0.2.0] - 2026-05-09
 
 ### Added

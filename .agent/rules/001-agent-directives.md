@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: [Go, PostgreSQL, pgvector, gRPC]
 dependencies: []
 created: 2026-03-31
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: b243cd30e1e6aba1
 tags: [agent-directive, hot-path, rule, constraint, zero-trust]
 ---

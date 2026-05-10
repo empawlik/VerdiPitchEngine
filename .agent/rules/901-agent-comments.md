@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: [Go, PostgreSQL, pgvector, gRPC]
 dependencies: []
 created: 2026-03-31
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: 04afcc3521e8f1d9
 tags: [dev-asset, antigravity-context]
 ---

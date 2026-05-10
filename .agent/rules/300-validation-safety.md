@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell"]
 dependencies: []
 created: "2026-04-26"
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: e4ef92d260554ab6
 tags: [safety, risk, guardrails, fail-closed, policy, go]
 ---

@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: [Go, PostgreSQL, pgvector, gRPC]
 dependencies: []
 created: 2026-03-31
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: 9aeff7b6f69caa58
 tags: [audit, observability, forensics, immutability, replayability, go]
 ---
