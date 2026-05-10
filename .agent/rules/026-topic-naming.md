@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: []
 dependencies: []
 created: 2026-04-19
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: 7828dea5d36f7e19
 tags: [architecture, messaging, standards, pubsub, routing]
 ---

@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: [SQLite, CAS]
 dependencies: [ATLAS]
 created: 2026-03-09
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: ceb43393ebffa5f0
 tags: [dev-asset, antigravity-context, rules, atlas]
 ---

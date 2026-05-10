@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell"]
 dependencies: []
 created: "2026-02-23"
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: 01be95363df8b27f
 tags: [dev-asset, antigravity-context, workspace-rule]
 ---

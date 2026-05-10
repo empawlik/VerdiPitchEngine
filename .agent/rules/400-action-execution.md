@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell"]
 dependencies: []
 created: "2026-04-26"
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: 0ee21082a28497d0
 tags: [execution, idempotency, secrets, protocol-adapters, side-effects, go]
 ---

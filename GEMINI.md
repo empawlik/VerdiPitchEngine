@@ -1,6 +1,6 @@
 ---
 project_name: "VerdiPitchEngine"
-version: 0.1.0
+version: 0.3.0
 status: "active"
 priority: "high"
 dev_stage: "development"
@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: 10079e6bd2c9c5e9
 tags: [dev-asset, audio, dsp]
 ---

@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: [Go, PostgreSQL, pgvector, gRPC]
 dependencies: []
 created: 2026-03-31
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: bf984393e3f764b5
 tags: [git, standards, process, branching]
 ---

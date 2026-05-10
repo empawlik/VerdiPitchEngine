@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell"]
 dependencies: []
 created: "2026-04-26"
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: c8a2fc88f372c6d5
 tags: [logic, strategy, determinism, intent-generation, go]
 ---

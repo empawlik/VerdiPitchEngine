@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: [Go, PostgreSQL, pgvector, gRPC]
 dependencies: []
 created: 2026-03-31
-updated: 2026-05-09
+updated: 2026-05-10
 body_hash: a40e7832490585d5
 tags: [protobuf, grpc, types, contract, consistency, compatibility, go]
 ---
