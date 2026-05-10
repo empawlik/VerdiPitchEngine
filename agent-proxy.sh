@@ -85,6 +85,8 @@ case "$SSH_ORIGINAL_COMMAND" in
       . /etc/profile
       export HOME=/share/homes/antigravity_agent
       
+
+
       ARGS=$(echo "$SSH_ORIGINAL_COMMAND" | sed 's/^deploy verdipitchengine *//')
       if [ -z "$ARGS" ]; then
         TARGET_DIR="/share/DataVol1/Music"
@@ -99,16 +101,17 @@ case "$SSH_ORIGINAL_COMMAND" in
         
         if [ -z "$TARGET_DIR_OUT" ]; then
            ORIGINAL_DIR="$TARGET_DIR"
-           TARGET_DIR="${ORIGINAL_DIR} [440 Hz]"
-           TARGET_DIR_OUT="${ORIGINAL_DIR} [432 Hz]"
-           
            PARENT_DIR=$(dirname "$ORIGINAL_DIR")
            BASE_ORIG=$(basename "$ORIGINAL_DIR")
-           BASE_TARG=$(basename "$TARGET_DIR")
-           BASE_OUT=$(basename "$TARGET_DIR_OUT")
+           
+           TARGET_DIR="${PARENT_DIR}/.${BASE_ORIG} [440 Hz]"
+           TARGET_DIR_OUT="${ORIGINAL_DIR}"
+           
+           BASE_TARG=".${BASE_ORIG} [440 Hz]"
+           BASE_OUT="${BASE_ORIG}"
            
            # Use Docker to bypass antigravity_agent permission constraints to check and rename
-           docker run --rm -v "$PARENT_DIR:/work" alpine sh -c "if [ -d '/work/$BASE_ORIG' ] && [ ! -d '/work/$BASE_TARG' ]; then echo '📦 Backing up original directory to: $TARGET_DIR' && mv '/work/$BASE_ORIG' '/work/$BASE_TARG'; fi && mkdir -p '/work/$BASE_OUT' && chmod 777 '/work/$BASE_OUT'"
+           docker run --rm -v "$PARENT_DIR:/work" alpine sh -c "if [ -d '/work/$BASE_ORIG' ] && [ ! -d '/work/$BASE_TARG' ]; then echo '📦 Backing up original directory to: $TARGET_DIR' && mv '/work/$BASE_ORIG' '/work/$BASE_TARG'; fi"
            
            # Automatically tag original files with 'VERSION=440 Hz' if not already set, so Roon badges them properly
            echo "🏷️  Checking and applying '440 Hz' VERSION tag to original files if missing..."

@@ -14,6 +14,15 @@ C_DIM="\033[1;30m"
 echo -e "\n${C_MAGENTA}🚀 INITIATING VERDI PITCH ENGINE 🚀${C_DEF}"
 echo -e "${C_DIM}------------------------------------------------${C_DEF}"
 
+# Execution Blocker: Ensure media servers are stopped to prevent metadata interference
+echo -e "🔍 Verifying media server status..."
+if ps | grep -v grep | grep -qE "RoonServer|RoonAppliance|Plex Media Server|mserver|twonkymediaserver|jellyfin|emby-server|squeezeboxserver"; then
+    echo -e "${C_MAGENTA}🚨 ERROR: An active Media Server (Roon, Plex, MinimServer, etc.) was detected!${C_DEF}"
+    echo -e "${C_MAGENTA}🛑 Verdi Pitch Engine will not continue due to possible database interference.${C_DEF}"
+    echo -e "${C_YELLOW}💡 Please stop any active media servers in the QNAP App Center before proceeding.${C_DEF}"
+    exit 1
+fi
+
 if [ -z "$1" ]; then
     echo -e "${C_YELLOW}⚠️  Usage: verdi-process <target_directory>${C_DEF}"
     echo -e "   Example: verdi-process \"/music/Artist/Album\"\n"

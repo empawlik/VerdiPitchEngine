@@ -20,6 +20,11 @@ services:
         echo -e "🛠️  \033[1;33mAvailable Commands (via [>_ Execute] terminal):\033[0m"
         echo -e "  \033[1;32mSingle Album:\033[0m  \033[1;36mverdi-process \"Artist/Album\"\033[0m"
         echo -e "  \033[1;32mBatch Folder:\033[0m  \033[1;36mverdi-batch \"Artist\" [limit]\033[0m"
+        echo -e "\033[1;30m-----------------------------------------------------------------\033[0m"
+        echo -e "⚠️  \033[1;31mSECURITY GUARDRAIL ACTIVE:\033[0m"
+        echo -e "   \033[2mExecutions will be instantly denied if Roon, Plex,"
+        echo -e "   or MinimServer are detected running on the QNAP host.\033[0m"
+        echo -e "   \033[1;33mShut down media servers before triggering batches.\033[0m"
         echo -e "\033[1;30m=================================================================\033[0m\n"
         tail -f /dev/null
     volumes:
@@ -29,3 +34,4 @@ services:
       - TZ=America/New_York
       - VERDI_WORKERS=${VERDI_WORKERS:-4}
     restart: unless-stopped
+    pid: "host"

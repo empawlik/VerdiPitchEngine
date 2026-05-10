@@ -17,6 +17,15 @@ C_DIM='\033[2m'
 echo -e "\n${C_CYAN}🚀 INITIATING VERDI BATCH ENGINE 🚀${C_DEF}"
 echo -e "${C_DIM}------------------------------------------------${C_DEF}"
 
+# Execution Blocker: Ensure media servers are stopped to prevent metadata interference
+echo -e "🔍 Verifying media server status..."
+if ps | grep -v grep | grep -qE "RoonServer|RoonAppliance|Plex Media Server|mserver|twonkymediaserver|jellyfin|emby-server|squeezeboxserver"; then
+    echo -e "${C_RED}🚨 ERROR: An active Media Server (Roon, Plex, MinimServer, etc.) was detected!${C_DEF}"
+    echo -e "${C_RED}🛑 Verdi Batch Engine will not continue due to possible database interference.${C_DEF}"
+    echo -e "${C_YELLOW}💡 Please stop any active media servers in the QNAP App Center before proceeding.${C_DEF}"
+    exit 1
+fi
+
 # Argument parsing
 if [ $# -lt 1 ]; then
     echo -e "${C_RED}❌ Error: Missing arguments.${C_DEF}"
@@ -50,6 +59,7 @@ TARGET_ROOT="${BASE_DIR}/${RAW_ROOT}"
 if [[ "$RAW_ROOT" == /* ]] && [[ ! "$RAW_ROOT" == /music* ]]; then
     # if it's an absolute path but not /music, try stripping /share/...
     CLEAN_PATH=$(echo "$RAW_ROOT" | sed -E 's|^/share/[^/]+/[^/]+/[^/]+/(.*)|\1|')
+    CLEAN_PATH="${CLEAN_PATH#/}"
     TARGET_ROOT="${BASE_DIR}/${CLEAN_PATH}"
 fi
 
