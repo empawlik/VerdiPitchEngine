@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-05-09
+
+### Added
+* [feat(100-core): stabilize audio pipeline and implement ba...](https://github.com/empawlik/VerdiPitchEngine/commit/a78df48de5b04503ec9f9acfde9f1bcc1380d37b)
+  * **feat(100-core)**: stabilize audio pipeline and implement batch orchestrator
+* [feat(100-core): implement real-time progress bars and con...](https://github.com/empawlik/VerdiPitchEngine/commit/237a9b4fc4d559ff8a54fcd37558d80a12b1217b)
+  * **feat(100-core)**: implement real-time progress bars and context timeouts
+
+### Changed
+* [test(100-core): implement robust CI environment mocks for...](https://github.com/empawlik/VerdiPitchEngine/commit/7ee8b8efd6fa4193390dbf61e7608d28e454d67b)
+  * **test(100-core)**: implement robust CI environment mocks for metadata extraction
+* [docs(050-docs): formalize batch orchestrator gap analysis...](https://github.com/empawlik/VerdiPitchEngine/commit/2d8b3bab7cc45493fa544299c2616d8a99f51247)
+  * **docs(050-docs)**: formalize batch orchestrator gap analysis and runbooks
+* [docs(055-docs): generate explorative post-mortem for VPE...](https://github.com/empawlik/VerdiPitchEngine/commit/c83b00b040c686616d274f2292019d5d71167e1a)
+  * **docs(055-docs)**: generate explorative post-mortem for VPE-010
+* [docs(055-docs): document UI and context safety features f...](https://github.com/empawlik/VerdiPitchEngine/commit/cf265d2848a1abdbd859daf65eda2bfed5b5435e)
+  * **docs(055-docs)**: document UI and context safety features for VPE-010
+
 ## [0.1.0] - 2026-05-09
 
 ### Added
