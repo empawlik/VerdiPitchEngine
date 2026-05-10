@@ -16,7 +16,8 @@ import (
 )
 
 // RunPool starts a worker pool to process the given tasks.
-func RunPool(tasks []fs.Task, numWorkers int) {
+func RunPool(tasks []fs.Task, numWorkers int) (int32, int32, int32, time.Duration) {
+	startTime := time.Now()
 	taskCh := make(chan fs.Task, len(tasks))
 	for _, t := range tasks {
 		taskCh <- t
@@ -92,8 +93,27 @@ func RunPool(tasks []fs.Task, numWorkers int) {
 
 	wg.Wait()
 	p.Wait()
-	log.Printf("\nWorker pool completed. Processed: %d, Skipped: %d, Errors: %d",
-		atomic.LoadInt32(&processed),
-		atomic.LoadInt32(&skipped),
-		atomic.LoadInt32(&errors))
+
+	albumsMap := make(map[string]bool)
+	for _, t := range tasks {
+		albumsMap[filepath.Dir(t.InputPath)] = true
+	}
+	numAlbums := len(albumsMap)
+
+	elapsed := time.Since(startTime)
+	fmt.Printf("\n\033[1;36m================================================\033[0m\n")
+	fmt.Printf("📊 \033[1;33mEXECUTION SUMMARY\033[0m\n")
+	fmt.Printf("\033[1;36m================================================\033[0m\n")
+	fmt.Printf("⏱️  \033[1;34mTime Elapsed:\033[0m %s\n", elapsed.Round(time.Second))
+	fmt.Printf("💿 \033[1;35mAlbums:\033[0m       %d\n", numAlbums)
+	fmt.Printf("✅ \033[1;32mProcessed:\033[0m    %d\n", atomic.LoadInt32(&processed))
+	fmt.Printf("⏭️  \033[1;34mSkipped:\033[0m      %d\n", atomic.LoadInt32(&skipped))
+	if errs := atomic.LoadInt32(&errors); errs > 0 {
+		fmt.Printf("❌ \033[1;31mErrors:\033[0m       %d\n", errs)
+	} else {
+		fmt.Printf("❌ \033[1;32mErrors:\033[0m       0\n")
+	}
+	fmt.Printf("\033[1;36m================================================\033[0m\n\n")
+
+	return atomic.LoadInt32(&processed), atomic.LoadInt32(&skipped), atomic.LoadInt32(&errors), elapsed
 }

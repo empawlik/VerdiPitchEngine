@@ -13,7 +13,7 @@ dependencies: []
 created: 2026-05-09
 updated: 2026-05-10
 tags: [audio, dsp]
-body_hash: bdf648e196080624
+body_hash: b13fccd893cbff41
 ---
 # Verdi Pitch Engine
 
@@ -32,11 +32,13 @@ In high-end residential audio environments (Roon, BluOS, Plex), applying real-ti
 * **Dynamic Bit-Depth & Sample Rate Preservation:** The engine mathematically detects the original bit depth and sample rate. High-resolution studio masters (e.g., 24-bit/96kHz, 192kHz) are natively preserved without downsampling, ensuring Audiophile-grade precision isn't crushed to standard 16-bit/44.1kHz during processing.
 * **MQA Purification:** Master Quality Authenticated (MQA) files rely on proprietary, fragile high-frequency data folding embedded in the 24-bit noise floor. Time-scale modification fundamentally recalculates the waveform, naturally destroying the proprietary MQA layer. The engine outputs a pure, standard 24-bit 432 Hz FLAC, effectively freeing your music from MQA lock-in and hardware decoding requirements.
 * **Zero Real-Time Overhead:** FLAC files are pre-processed, allowing network endpoints (Buchardt, BluOS, Denon) to stream them bit-perfectly without real-time DSP jitter.
-* **In-Place Roon Preservation:** Replaces original audio files in-place and hides the 440 Hz backups behind dot-prefixed directories. The system natively clones exact filesystem timestamps (`ModTime`, `AccessTime`), ensuring Roon flawlessly maintains your playlists, favorites, and true "Date Added" metrics without seeing annoying duplicate albums.
+* **In-Place Roon Preservation:** Replaces original audio files strictly in-place, perfectly retaining the original directory name while hiding the 440 Hz backups behind dot-prefixed hidden folders (e.g., `.[440 Hz]`). The system natively clones exact filesystem timestamps (`ModTime`, `AccessTime`), ensuring Roon flawlessly maintains your playlists, favorites, and true "Date Added" metrics without detecting duplicate albums.
 * **Native Roon Integration:** Injects the official `VERSION=432 Hz` Vorbis metadata tag natively into both the new and original files. Roon will recognize the pitch-shifted tracks as a distinct release edition and explicitly badge the album in its UI!
 * **Automated Sidecar Migration:** Seamlessly detects and duplicates all non-FLAC sidecar assets (like `.lrc` synced lyrics, `.pdf` digital booklets, and `.jpg` album covers) from the hidden 440 Hz backup into the new 432 Hz output directory, guaranteeing a flawless presentation in your digital library.
 * **Topology Aware (Recursive):** Recursively scans the source directory. You can point the engine at a single Album folder, an Artist root folder, or your entire Music library; it will perfectly replicate your nested hierarchy in the destination directory.
 * **Real-Time CLI Progress Visualization:** Employs the `mpb/v8` multi-progress bar library to give you rich, terminal-based feedback. The CLI explicitly displays global batch completion percentage alongside real-time microsecond-level progression for each individual active worker thread.
+* **Persistent Audit Telemetry:** Every interactive batch or single-album session produces a color-coded `EXECUTION SUMMARY` detailing processed albums, skipped directories, errors, and total runtime duration. This telemetry is automatically audited to a persistent `verdi-conversion.log` in the root of your music directory.
+* **Airtight Execution Guardrails:** The container runs with `pid: "host"` privileges, enabling the internal `verdi-batch` and `verdi-process` scripts to perform live process-tree inspections on the QNAP host. The engine natively hard-aborts execution if an active instance of `RoonServer`, `Plex Media Server`, `MinimServer`, `TwonkyMedia`, `Logitech Media Server`, or `Jellyfin/Emby` is detected, physically preventing catastrophic database collisions during in-place directory restructuring.
 * **Contextual Execution Safety:** To protect your enterprise NAS from catastrophic hang-states during large directory conversions, each lossless track conversion is wrapped in a strict 15-minute `context.WithTimeout` termination bound, ensuring silent `ffmpeg` execution failures or edge-case corrupted inputs never indefinitely deadlock the main execution pool.
 
 ### Hardware Requirements

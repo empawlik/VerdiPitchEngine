@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"time"
 
 	"github.com/empawlik/verdi-pitch-engine/internal/converter"
 	"github.com/empawlik/verdi-pitch-engine/internal/fs"
@@ -76,5 +78,27 @@ func main() {
 
 	log.Printf("Found %d files to process.", len(tasks))
 
-	converter.RunPool(tasks, workers)
+	processed, skipped, errorsCount, elapsed := converter.RunPool(tasks, workers)
+
+	albumsMap := make(map[string]bool)
+	for _, t := range tasks {
+		albumsMap[filepath.Dir(t.InputPath)] = true
+	}
+	numAlbums := len(albumsMap)
+
+	logFilePath := "/music/verdi-conversion.log"
+	f, logErr := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if logErr == nil {
+		defer f.Close()
+		logEntry := fmt.Sprintf("[%s] TARGET: %s | ALBUMS: %d | PROCESSED: %d | SKIPPED: %d | ERRORS: %d | TIME: %s\n",
+			time.Now().Format(time.RFC3339),
+			inDir, numAlbums,
+			processed, skipped, errorsCount, elapsed.Round(time.Second),
+		)
+		if _, writeErr := f.WriteString(logEntry); writeErr != nil {
+			log.Printf("Failed to write to persistent log: %v", writeErr)
+		}
+	} else {
+		log.Printf("Warning: Could not open persistent log at %s: %v", logFilePath, logErr)
+	}
 }
