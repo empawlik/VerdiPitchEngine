@@ -13,7 +13,7 @@ dependencies: []
 created: 2026-05-09
 updated: 2026-05-09
 tags: [audio, dsp]
-body_hash: 5cb9f212ab9b30f8
+body_hash: 888901202fa31a17
 ---
 # Verdi Pitch Engine
 
@@ -70,3 +70,21 @@ The orchestration wrapper will:
 2. Enforce the `440 Hz` version tag on the master tracks.
 3. Perform duration-preserving 432 Hz pitch shifting via the Go engine.
 4. Auto-migrate your cover art, PDFs, and lyrics files to the newly minted `[432 Hz]` directory.
+
+#### 3. Headless Batch Execution
+If you want to process massive chunks of your library in an automated queue, use the new `verdi-batch` orchestration script.
+
+```bash
+verdi-batch "Artist" 10
+```
+
+The batch engine will natively:
+* Scan the `Artist` directory for unprocessed FLAC albums.
+* Filter out and strictly ignore albums that have already generated a `[432 Hz]` target or are already tagged as `[440 Hz]`.
+* Sort the pending list alphabetically.
+* Process the top 10 pending albums sequentially.
+
+If you omit the numeric limit, it will default to processing all pending albums sequentially:
+```bash
+verdi-batch "Artist"
+```
