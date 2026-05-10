@@ -1,20 +1,26 @@
 services:
   verdi-pitch-engine:
-    build: .
+    build:
+      context: .
+      args:
+        VERSION: ${VERSION:-dev}
+        BUILD_HASH: ${BUILD_HASH:-unknown}
     image: empawlik/verdi-pitch-engine:${IMAGE_TAG:-latest}
     container_name: ${CONTAINER_NAME:-verdi-pitch-engine-app}
     # Keeps the container sleeping in the background and prints instructions to the logs
     entrypoint: ["/bin/bash", "-c"]
     command:
       - |
-        echo '==================================================='
-        echo '🎵 VerdiPitchEngine Container Station Hub 🎵'
-        echo '==================================================='
-        echo 'The engine is standing by in interactive mode.'
-        echo 'To process an album:'
-        echo '  1. Click the [>_ Execute] terminal icon'
-        echo '  2. Run: verdi-process "/music/Artist/Album"'
-        echo '==================================================='
+        echo -e "\n🎶 \033[1;36mVERDI PITCH ENGINE CONTAINER HUB\033[0m 🎶"
+        echo -e "\033[1;30m=================================================================\033[0m"
+        echo -e "🏷️  \033[1;34mVersion:\033[0m    ${VERSION:-0.3.0} (Build: ${BUILD_HASH:-unknown})"
+        echo -e "🎯 \033[1;34mPurpose:\033[0m    High-fidelity lossless batch pitch-shifting (440 Hz -> 432 Hz)"
+        echo -e "🟢 \033[1;34mStatus:\033[0m     Engine is standing by in interactive mode"
+        echo -e "\033[1;30m-----------------------------------------------------------------\033[0m"
+        echo -e "🛠️  \033[1;33mAvailable Commands (via [>_ Execute] terminal):\033[0m"
+        echo -e "  \033[1;32mSingle Album:\033[0m  \033[1;36mverdi-process \"Artist/Album\"\033[0m"
+        echo -e "  \033[1;32mBatch Folder:\033[0m  \033[1;36mverdi-batch \"Artist\" [limit]\033[0m"
+        echo -e "\033[1;30m=================================================================\033[0m\n"
         tail -f /dev/null
     volumes:
       # Mount the entire QNAP music library

@@ -10,6 +10,11 @@ import (
 	"github.com/empawlik/verdi-pitch-engine/internal/fs"
 )
 
+var (
+	Version = "dev"
+	Build   = "unknown"
+)
+
 func main() {
 	var workers int
 	var inDir string
@@ -48,10 +53,16 @@ func main() {
 		workers = 1
 	}
 
-	log.Printf("Starting Verdi Pitch Engine")
-	log.Printf("Input directory: %s", inDir)
-	log.Printf("Output directory: %s", outDir)
-	log.Printf("Workers: %d", workers)
+	fmt.Printf("\n🎶 \033[1;36mVERDI PITCH ENGINE\033[0m 🎶\n")
+	fmt.Printf("\033[1;30m================================================\033[0m\n")
+	fmt.Printf("🏷️  \033[1;34mVersion:\033[0m    %s (Build: %s)\n", Version, Build)
+	fmt.Printf("🎯 \033[1;34mPurpose:\033[0m    High-fidelity lossless batch pitch-shifting (440 Hz -> 432 Hz)\n")
+	fmt.Printf("📂 \033[1;34mInput Dir:\033[0m  %s\n", inDir)
+	fmt.Printf("📂 \033[1;34mOutput Dir:\033[0m %s\n", outDir)
+	fmt.Printf("⚙️  \033[1;34mWorkers:\033[0m    %d\n", workers)
+	fmt.Printf("\033[1;30m================================================\033[0m\n\n")
+
+	log.Printf("Starting initialization sequence...")
 
 	tasks, err := fs.WalkAndCollect(inDir, outDir)
 	if err != nil {

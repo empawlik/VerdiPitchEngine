@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-10
-body_hash: 10079e6bd2c9c5e9
+body_hash: bca0b33e0fe10c7c
 tags: [dev-asset, audio, dsp]
 ---
 # VerdiPitchEngine Agent Orchestration (GEMINI.md)
@@ -44,4 +44,4 @@ To govern AI behavior predictably, the repository relies on a structured knowled
 
 ## 🤖 Operational Goal
 
-- **Current Focus:** Finalize the Go-native infrastructure migration and verify the `ffmpeg` pipeline behavior for absolute bit-perfect audio conversion before v0.1.0 release tagging.
+- **Current Focus:** Finalize the Go-native infrastructure migration and verify the `ffmpeg` pipeline behavior for absolute bit-perfect audio conversion before v0.3.0 release tagging.
