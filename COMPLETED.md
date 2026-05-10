@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-09
-body_hash: 652d1bec8a29e8f0
+body_hash: 4a41558cc437af81
 tags: [dev-asset, docs, completed-tasks]
 ---
 
@@ -34,3 +34,8 @@ tags: [dev-asset, docs, completed-tasks]
 - **Status:** Completed
 - **Description:** Migrated the core pitch-shifting engine from legacy ffmpeg filters to librubberband for high-fidelity, duration-preserving Time-Scale Modification. Implemented dynamic 24-bit audio preservation and native sidecar asset migration. Added a robust Container Station CLI wrapper with interactive dashboarding and auto-pathing for QNAP environments.
 - **GitHub Issue:** #13
+
+### [x] VPE-010: Multi-Progress Bar Implementation and Context Safety
+- **Status:** Completed
+- **Description:** Implement real-time progress bars for file processing and prevent invisible hangs during long-running tasks.
+- **GitHub Issue:** #20

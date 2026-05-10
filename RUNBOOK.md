@@ -13,7 +13,7 @@ dependencies: []
 created: 2026-05-09
 updated: 2026-05-09
 tags: [audio, dsp]
-body_hash: 1941013757dcb036
+body_hash: 73cf9b4caf17a9a1
 ---
 # Verdi Pitch Engine Runbook
 
@@ -72,4 +72,26 @@ You can optionally override both the input and output directories:
 ```bash
 # Explicit Output Mode
 VERDI_TARGET_DIR="/share/DataVol1/Music_New" VERDI_OUT_DIR="/share/DataVol1/Music_New_432" mage deploy
+```
+
+### Orchestration Scripts
+
+Once the container is deployed, you execute the conversion logic directly from within the container environment (via Container Station or SSH).
+
+#### Interactive Single-Album Processing
+To process a single album immediately, use `verdi-process`. This maps relative paths automatically and handles version tag generation.
+
+```bash
+verdi-process "Artist/Nightmares on Wax/Smokers Delight"
+```
+
+#### Headless Batch Processing
+To queue up an entire root folder of albums for unattended processing, use `verdi-batch`. This script intelligently filters out already processed albums and executes them alphabetically.
+
+```bash
+# Process a maximum of 10 pending albums from the Artist directory
+verdi-batch "Artist" 10
+
+# Process ALL pending albums in the directory (limit omitted or set to 'all')
+verdi-batch "Artist"
 ```

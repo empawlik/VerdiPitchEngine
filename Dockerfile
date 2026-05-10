@@ -29,9 +29,10 @@ RUN apt-get update && \
 # Copy the binary from the builder stage
 COPY --from=builder /go/bin/verdi-pitch-engine /usr/local/bin/verdi-pitch-engine
 
-# Copy the orchestration wrapper script
+# Copy the orchestration wrapper scripts
 COPY scripts/verdi-process.sh /usr/local/bin/verdi-process
-RUN chmod +x /usr/local/bin/verdi-process
+COPY scripts/verdi-batch.sh /usr/local/bin/verdi-batch
+RUN chmod +x /usr/local/bin/verdi-process /usr/local/bin/verdi-batch
 
 # Default environment variables for worker count and paths
 ENV VERDI_WORKERS=4

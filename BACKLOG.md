@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-09
-body_hash: d1359ed49e115ecf
+body_hash: a17b33423964f73c
 tags: [dev-asset, docs]
 ---
 
@@ -30,3 +30,5 @@ tags: [dev-asset, docs]
 - [ ] **VPE-006** [#10]: Spectral Analysis Validation (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-008** [#14]: Dynamic Pitch-Shift Strategy Selection (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-009** [#15]: Post-Processing Fidelity Validation (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-011** [#21]: Dynamic Context Timeout Bounding (Ref: [VPE-010](.agent/docs/gap-analysis/task-post-mortem/VPE-010.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-012** [#22]: Headless / Daemon Log Redirection (Ref: [VPE-010](.agent/docs/gap-analysis/task-post-mortem/VPE-010.md)) #status:brainstorm #priority:medium

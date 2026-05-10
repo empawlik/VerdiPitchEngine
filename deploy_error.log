@@ -1,0 +1,26 @@
+
+🚀 [1;35mINITIATING ZERO-TRUST QNAP SYNCHRONIZATION[0m 🚀
+[1;30m------------------------------------------------[0m
+📦 [1;34mSyncing VerdiPitchEngine to Remote Enclave Mirror...[0m
+./
+.env
+             25 100%   26.09KB/s   00:00:00 (xfer#1, to-check=1/114)
+deploy_error.log
+            271 140%    1.16MB/s   00:00:00 (xfer#2, to-check=15/114)
+🔄 [1;34mRestarting VerdiPitchEngine container via Zero-Trust Proxy...[0m
+🏷️  [1;36mVersioning Image as:[0m v0.1.0-c83b00b
+🧹 Cleaning up old containers...
+time="2026-05-09T18:43:27-04:00" level=warning msg="/share/AIgorLabs/enclaves/VerdiPitchEngine/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+🏗️  Building image with docker-compose...
+time="2026-05-09T18:43:28-04:00" level=warning msg="/share/AIgorLabs/enclaves/VerdiPitchEngine/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+🚀 Starting updated container (verdi-pitch-engine-v010-c83b00b)...
+time="2026-05-09T18:43:28-04:00" level=warning msg="/share/AIgorLabs/enclaves/VerdiPitchEngine/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Network verdipitchengine_default  Creating
+ Network verdipitchengine_default  Created
+ Container verdi-pitch-engine-v010-c83b00b  Creating
+ Container verdi-pitch-engine-v010-c83b00b  Created
+ Container verdi-pitch-engine-v010-c83b00b  Starting
+ Container verdi-pitch-engine-v010-c83b00b  Started
+
+✨ [1;32mDEPLOYMENT COMPLETE[0m ✨
+
