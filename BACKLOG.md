@@ -12,14 +12,13 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-10
-body_hash: 613e2ea628b374ac
+body_hash: 7d33df1b74f141e6
 tags: [dev-asset, docs]
 ---
 
 # VerdiPitchEngine Backlog
 
 ## Active Tasks
-- None currently
 
 ## Icebox
 

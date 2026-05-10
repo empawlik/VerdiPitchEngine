@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-10
-body_hash: 809812ddfb28e9df
+body_hash: 9b00af9bad87dc2b
 tags: [dev-asset, docs, completed-tasks]
 ---
 
@@ -44,3 +44,8 @@ tags: [dev-asset, docs, completed-tasks]
 - **Status:** Completed
 - **Description:** Shifted from side-by-side folder structure to a hidden-backup & in-place update architecture, natively copying filesystem timestamps (`ModTime`, `AccessTime`) to preserve Roon metadata and database links.
 - **GitHub Issue:** #24
+
+### [x] VPE-016: Persistent Execution Logging & Proxy Bugfix
+- **Status:** Completed
+- **Description:** Implemented persistent file logging of the batch execution summary, and secured the system by adding native process-tree verification (Roon/Plex check) directly into the interactive scripts via host PID privileges.
+- **GitHub Issue:** #31
