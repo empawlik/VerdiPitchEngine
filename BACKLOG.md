@@ -12,13 +12,14 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-10
-body_hash: 5490e621e02d9802
+body_hash: 8f01937dcc15e008
 tags: [dev-asset, docs]
 ---
 
 # VerdiPitchEngine Backlog
 
 ## Active Tasks
+- [ ] **VPE-008** [#14]: Dynamic Pitch-Shift Strategy Selection (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:in-progress #priority:medium
 
 ## Icebox
 
@@ -27,7 +28,6 @@ tags: [dev-asset, docs]
 - [ ] **VPE-004** [#4]: NAS I/O Optimization (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-005** [#9]: Containerized E2E Runner (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-006** [#10]: Spectral Analysis Validation (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
-- [ ] **VPE-008** [#14]: Dynamic Pitch-Shift Strategy Selection (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-009** [#15]: Post-Processing Fidelity Validation (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-011** [#21]: Dynamic Context Timeout Bounding (Ref: [VPE-010](.agent/docs/gap-analysis/task-post-mortem/VPE-010.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-012** [#22]: Headless / Daemon Log Redirection (Ref: [VPE-010](.agent/docs/gap-analysis/task-post-mortem/VPE-010.md)) #status:brainstorm #priority:medium
