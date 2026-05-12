@@ -2,6 +2,7 @@ package converter
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"testing"
@@ -22,7 +23,7 @@ func TestProcessFile_Integration(t *testing.T) {
 
 	createDummyFlac(t, inPath)
 
-	err := ProcessFile(context.Background(), inPath, outPath, nil)
+	err := ProcessFile(context.Background(), inPath, outPath, "rubberband", nil)
 	if err != nil {
 		// If it failed because of missing rubberband filter, we just log and pass
 		// to still gain the partial coverage of the setup logic.
@@ -74,7 +75,7 @@ func TestBuildFFmpegArgs(t *testing.T) {
 	outPath := "out.flac"
 
 	// Test 16-bit
-	args16 := buildFFmpegArgs(inPath, outPath, 16, "")
+	args16 := buildFFmpegArgs(inPath, outPath, 16, "", "rubberband")
 	found16 := false
 	for _, arg := range args16 {
 		if arg == "s16" {
@@ -86,8 +87,8 @@ func TestBuildFFmpegArgs(t *testing.T) {
 		t.Errorf("Expected 16-bit args to contain 's16', got: %v", args16)
 	}
 
-	// Test 24-bit
-	args24 := buildFFmpegArgs(inPath, outPath, 24, "96000")
+	// Test 24-bit with rubberband
+	args24 := buildFFmpegArgs(inPath, outPath, 24, "96000", "rubberband")
 	found24 := false
 	for _, arg := range args24 {
 		if arg == "s32" {
@@ -97,6 +98,20 @@ func TestBuildFFmpegArgs(t *testing.T) {
 	}
 	if !found24 {
 		t.Errorf("Expected 24-bit args to contain 's32', got: %v", args24)
+	}
+
+	// Test asetrate strategy
+	argsAset := buildFFmpegArgs(inPath, outPath, 24, "48000", "asetrate")
+	foundAset := false
+	expectedFilter := fmt.Sprintf("asetrate=%f,aresample=48000", float64(48000)*float64(432)/float64(440))
+	for _, arg := range argsAset {
+		if arg == expectedFilter {
+			foundAset = true
+			break
+		}
+	}
+	if !foundAset {
+		t.Errorf("Expected asetrate args to contain '%s', got: %v", expectedFilter, argsAset)
 	}
 }
 
@@ -179,7 +194,7 @@ func TestProcessFile_MockedSuccess(t *testing.T) {
 	defer os.Remove(outPath)
 	defer os.Remove(tmpOutPath)
 
-	err := ProcessFile(context.Background(), inPath, outPath, nil)
+	err := ProcessFile(context.Background(), inPath, outPath, "rubberband", nil)
 	if err != nil {
 		t.Errorf("Expected mocked ProcessFile to succeed, got %v", err)
 	}

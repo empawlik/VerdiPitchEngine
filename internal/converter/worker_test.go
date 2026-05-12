@@ -27,7 +27,7 @@ func TestRunPool(t *testing.T) {
 
 	// Running RunPool should process both tasks
 	// 1 skipped, 1 error
-	RunPool(tasks, 2)
+	RunPool(tasks, 2, "rubberband")
 
 	// We verify that existing file is untouched
 	if _, err := os.Stat(existingOutPath); os.IsNotExist(err) {

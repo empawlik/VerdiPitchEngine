@@ -25,6 +25,10 @@ func WalkAndCollect(inDir, outDir string) ([]Task, error) {
 		}
 
 		if info.IsDir() {
+			base := info.Name()
+			if path != inDir && (strings.HasPrefix(base, ".@__") || base == ".AppleDouble") {
+				return filepath.SkipDir
+			}
 			return nil
 		}
 

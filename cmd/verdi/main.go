@@ -21,10 +21,12 @@ func main() {
 	var workers int
 	var inDir string
 	var outDir string
+	var strategy string
 
 	flag.IntVar(&workers, "workers", 4, "Number of concurrent workers")
 	flag.StringVar(&inDir, "in", "/music_in", "Input directory containing FLAC files")
 	flag.StringVar(&outDir, "out", "/music_out", "Output directory for pitch-shifted files")
+	flag.StringVar(&strategy, "strategy", "rubberband", "Pitch-shift strategy: 'rubberband' (duration preservation) or 'asetrate' (phase fidelity)")
 	flag.Parse()
 
 	// Check if specific flags were explicitly provided on the CLI
@@ -50,6 +52,9 @@ func main() {
 	if envOut := os.Getenv("VERDI_OUT"); envOut != "" && !isFlagPassed("out") {
 		outDir = envOut
 	}
+	if envStrategy := os.Getenv("VERDI_STRATEGY"); envStrategy != "" && !isFlagPassed("strategy") {
+		strategy = envStrategy
+	}
 
 	if workers < 1 {
 		workers = 1
@@ -62,6 +67,7 @@ func main() {
 	fmt.Printf("📂 \033[1;34mInput Dir:\033[0m  %s\n", inDir)
 	fmt.Printf("📂 \033[1;34mOutput Dir:\033[0m %s\n", outDir)
 	fmt.Printf("⚙️  \033[1;34mWorkers:\033[0m    %d\n", workers)
+	fmt.Printf("🎼 \033[1;34mStrategy:\033[0m   %s\n", strategy)
 	fmt.Printf("\033[1;30m================================================\033[0m\n\n")
 
 	log.Printf("Starting initialization sequence...")
@@ -78,7 +84,7 @@ func main() {
 
 	log.Printf("Found %d files to process.", len(tasks))
 
-	processed, skipped, errorsCount, elapsed := converter.RunPool(tasks, workers)
+	processed, skipped, errorsCount, elapsed := converter.RunPool(tasks, workers, strategy)
 
 	albumsMap := make(map[string]bool)
 	for _, t := range tasks {

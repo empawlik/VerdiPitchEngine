@@ -29,13 +29,14 @@ fi
 # Argument parsing
 if [ $# -lt 1 ]; then
     echo -e "${C_RED}❌ Error: Missing arguments.${C_DEF}"
-    echo -e "Usage: verdi-batch <root-folder> [limit]"
-    echo -e "Example: verdi-batch \"Artist\" 10"
+    echo -e "Usage: verdi-batch <root-folder> [limit] [strategy]"
+    echo -e "Example: verdi-batch \"Artist\" 10 asetrate"
     exit 1
 fi
 
 RAW_ROOT="$1"
 LIMIT="${2:-all}"
+STRATEGY="${3:-rubberband}"
 
 if [[ "$LIMIT" != "all" ]] && ! [[ "$LIMIT" =~ ^[0-9]+$ ]]; then
     echo -e "${C_RED}❌ Error: Limit must be an integer or 'all'.${C_DEF}"
@@ -138,7 +139,7 @@ for idx in "${!ALBUMS_TO_PROCESS[@]}"; do
     echo -e "================================================================"
     
     # Call verdi-process using the relative path so it correctly maps it
-    /usr/local/bin/verdi-process "$REL_PATH"
+    /usr/local/bin/verdi-process "$REL_PATH" "$STRATEGY"
     
     echo -e "\n✅ Finished: ${C_DIM}${REL_PATH}${C_DEF}"
     sleep 2

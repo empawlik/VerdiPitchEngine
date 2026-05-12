@@ -16,7 +16,7 @@ import (
 )
 
 // RunPool starts a worker pool to process the given tasks.
-func RunPool(tasks []fs.Task, numWorkers int) (int32, int32, int32, time.Duration) {
+func RunPool(tasks []fs.Task, numWorkers int, strategy string) (int32, int32, int32, time.Duration) {
 	startTime := time.Now()
 	taskCh := make(chan fs.Task, len(tasks))
 	for _, t := range tasks {
@@ -75,7 +75,7 @@ func RunPool(tasks []fs.Task, numWorkers int) (int32, int32, int32, time.Duratio
 				// Prevent file processing from hanging
 				ctx, cancel := context.WithTimeout(context.Background(), 15*time.Minute)
 
-				if err := ProcessFile(ctx, task.InputPath, task.OutputPath, bar); err != nil {
+				if err := ProcessFile(ctx, task.InputPath, task.OutputPath, strategy, bar); err != nil {
 					atomic.AddInt32(&errors, 1)
 					log.Printf("❌ [Worker %d] Error processing %s: %v", workerID, task.InputPath, err)
 					os.Remove(task.OutputPath)
