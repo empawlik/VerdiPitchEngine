@@ -24,12 +24,13 @@ if ps | grep -v grep | grep -qE "RoonServer|RoonAppliance|Plex Media Server|mser
 fi
 
 if [ -z "$1" ]; then
-    echo -e "${C_YELLOW}⚠️  Usage: verdi-process <target_directory>${C_DEF}"
-    echo -e "   Example: verdi-process \"/music/Artist/Album\"\n"
+    echo -e "${C_YELLOW}⚠️  Usage: verdi-process <target_directory> [strategy]${C_DEF}"
+    echo -e "   Example: verdi-process \"/music/Artist/Album\" asetrate\n"
     exit 1
 fi
 
 TARGET_DIR=$(echo "$1" | tr -s '/')
+STRATEGY="${2:-rubberband}"
 TARGET_DIR="${TARGET_DIR%/}"
 
 # Auto-correct full QNAP host paths to the internal container mount path
@@ -75,9 +76,9 @@ else
 fi
 
 echo -e "\n🏷️  ${C_BLUE}Step 2: Enforcing Version Metadata (440 Hz)...${C_DEF}"
-find "$TARGET_DIR_440" -type f -name '*.flac' | while read file; do
+find "$TARGET_DIR_440" -type d \( -name ".@__*" -o -name ".AppleDouble" \) -prune -o -type f -name '*.flac' -print | while read file; do
     if ! metaflac --show-tag=VERSION "$file" | grep -qi VERSION; then
-        metaflac --set-tag="VERSION=440 Hz" "$file"
+        metaflac --preserve-modtime --set-tag="VERSION=440 Hz" "$file"
     fi
 done
 echo -e "   ${C_GREEN}✔ Metadata enforcement complete.${C_DEF}"
@@ -92,22 +93,35 @@ find "$TARGET_DIR_432" -type f -name '*.tmp' -delete 2>/dev/null || true
 
 echo -e "\n⚙️  ${C_BLUE}Step 4: Executing High-Fidelity DSP TSM...${C_DEF}"
 echo -e "${C_DIM}------------------------------------------------${C_DEF}"
-VERDI_IN="" VERDI_OUT="" /usr/local/bin/verdi-pitch-engine -in "$TARGET_DIR_440" -out "$TARGET_DIR_432"
+VERDI_IN="" VERDI_OUT="" VERDI_STRATEGY="$STRATEGY" /usr/local/bin/verdi-pitch-engine -in "$TARGET_DIR_440" -out "$TARGET_DIR_432"
 echo -e "${C_DIM}------------------------------------------------${C_DEF}"
 
 echo -e "\n🖼️  ${C_BLUE}Step 5: Migrating Sidecar Metadata (Art, Lyrics, PDFs)...${C_DEF}"
 (
     cd "$TARGET_DIR_440" || exit
     # Find all non-FLAC files and copy them to the 432 Hz directory, preserving timestamps and folder structure
-    find . -type f ! -iname "*.flac" -exec cp -p --parents "{}" "$TARGET_DIR_432/" \;
+    find . -type d \( -name ".@__*" -o -name ".AppleDouble" \) -prune -o -type f ! -iname "*.flac" -exec cp -p --parents "{}" "$TARGET_DIR_432/" \;
 )
 echo -e "   ${C_GREEN}✔ Sidecar migration complete.${C_DEF}"
 
-echo -e "\n🕰️  ${C_BLUE}Step 6: Synchronizing Directory Timestamps...${C_DEF}"
-find "$TARGET_DIR_440" -type d | while read -r dir; do
-    rel_dir="${dir#$TARGET_DIR_440}"
-    if [ -d "$TARGET_DIR_432$rel_dir" ]; then
-        touch -r "$dir" "$TARGET_DIR_432$rel_dir"
+echo -e "\n🏷️  ${C_BLUE}Step 6: Enforcing Version Metadata (432 Hz)...${C_DEF}"
+if [ "$STRATEGY" == "asetrate" ]; then
+    VERSION_STRING="432 Hz (Asetrate)"
+else
+    VERSION_STRING="432 Hz"
+fi
+
+find "$TARGET_DIR_432" -type d \( -name ".@__*" -o -name ".AppleDouble" \) -prune -o -type f -name '*.flac' -print | while read -r file; do
+    metaflac --preserve-modtime --remove-tag=VERSION "$file"
+    metaflac --preserve-modtime --set-tag="VERSION=${VERSION_STRING}" "$file"
+done
+echo -e "   ${C_GREEN}✔ Output metadata enforcement complete (${VERSION_STRING}).${C_DEF}"
+
+echo -e "\n🕰️  ${C_BLUE}Step 7: Synchronizing File & Directory Timestamps...${C_DEF}"
+find "$TARGET_DIR_440" -type d \( -name ".@__*" -o -name ".AppleDouble" \) -prune -o -print | while read -r path; do
+    rel_path="${path#$TARGET_DIR_440}"
+    if [ -e "$TARGET_DIR_432$rel_path" ]; then
+        touch -r "$path" "$TARGET_DIR_432$rel_path"
     fi
 done
 echo -e "   ${C_GREEN}✔ Original timestamps preserved to prevent Roon 'Recent' flagging.${C_DEF}"

@@ -11,9 +11,9 @@ platform: qnap
 tech_stack: [go, ffmpeg]
 dependencies: []
 created: 2026-05-09
-updated: 2026-05-10
+updated: 2026-05-11
 tags: [audio, dsp]
-body_hash: 73cf9b4caf17a9a1
+body_hash: c9cc430b9b939ea3
 ---
 # Verdi Pitch Engine Runbook
 
@@ -82,7 +82,7 @@ Once the container is deployed, you execute the conversion logic directly from w
 To process a single album immediately, use `verdi-process`. This maps relative paths automatically and handles version tag generation.
 
 ```bash
-verdi-process "Artist/Nightmares on Wax/Smokers Delight"
+verdi-process "Artist/Nightmares on Wax/Smokers Delight" [strategy]
 ```
 
 #### Headless Batch Processing
@@ -90,8 +90,8 @@ To queue up an entire root folder of albums for unattended processing, use `verd
 
 ```bash
 # Process a maximum of 10 pending albums from the Artist directory
-verdi-batch "Artist" 10
+verdi-batch "Artist" 10 [strategy]
 
 # Process ALL pending albums in the directory (limit omitted or set to 'all')
-verdi-batch "Artist"
+verdi-batch "Artist" all [strategy]
 ```

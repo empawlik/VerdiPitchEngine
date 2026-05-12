@@ -100,10 +100,21 @@ func getSampleRate(filePath string) (string, error) {
 	return srStr, nil
 }
 
-// ProcessFile invokes FFmpeg to pitch-shift the input FLAC file to the output FLAC file.
-func buildFFmpegArgs(inPath, outPath string, depth int, sampleRate string) []string {
+// buildFFmpegArgs constructs the FFmpeg CLI arguments.
+func buildFFmpegArgs(inPath, outPath string, depth int, sampleRate, strategy string) []string {
 	pitchRatio := float64(432) / float64(440)
-	filter := fmt.Sprintf("rubberband=pitch=%f", pitchRatio)
+
+	var filter string
+	if strategy == "asetrate" && sampleRate != "" {
+		if srInt, err := strconv.Atoi(sampleRate); err == nil {
+			newSr := float64(srInt) * pitchRatio
+			filter = fmt.Sprintf("asetrate=%f,aresample=%s", newSr, sampleRate)
+		} else {
+			filter = fmt.Sprintf("rubberband=pitch=%f", pitchRatio)
+		}
+	} else {
+		filter = fmt.Sprintf("rubberband=pitch=%f", pitchRatio)
+	}
 
 	args := []string{
 		"-y",
@@ -178,7 +189,7 @@ func inheritMetadata(ctx context.Context, inPath, outPath string) error {
 }
 
 // ProcessFile invokes FFmpeg to pitch-shift the input FLAC file to the output FLAC file.
-func ProcessFile(ctx context.Context, inPath, outPath string, bar *mpb.Bar) error {
+func ProcessFile(ctx context.Context, inPath, outPath, strategy string, bar *mpb.Bar) error {
 	depth, _ := getBitDepth(inPath)
 	durationSec, _ := getDuration(inPath)
 	sampleRate, _ := getSampleRate(inPath)
@@ -191,8 +202,8 @@ func ProcessFile(ctx context.Context, inPath, outPath string, bar *mpb.Bar) erro
 	// Use a temporary file to avoid media scanners (e.g. Roon) locking the file while it's being written.
 	tmpOutPath := outPath + ".tmp"
 
-	// High-fidelity Time-Scale Modification (TSM) pitch-shift using librubberband.
-	args := buildFFmpegArgs(inPath, tmpOutPath, depth, sampleRate)
+	// High-fidelity pitch-shift using selected strategy.
+	args := buildFFmpegArgs(inPath, tmpOutPath, depth, sampleRate, strategy)
 
 	cmd := execCommandContext(ctx, "ffmpeg", args...)
 

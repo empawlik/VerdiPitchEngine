@@ -80,7 +80,7 @@ func TestE2EFFmpegPitchShift(t *testing.T) {
 	}
 
 	// Run the worker pool with 1 worker
-	RunPool(tasks, 1)
+	RunPool(tasks, 1, "rubberband")
 
 	// Verify the output exists
 	if _, err := os.Stat(outputFlac); os.IsNotExist(err) {

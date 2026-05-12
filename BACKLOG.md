@@ -11,8 +11,8 @@ platform: "CLI"
 tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
-updated: 2026-05-10
-body_hash: 5490e621e02d9802
+updated: 2026-05-11
+body_hash: 1df0885a6c28bea4
 tags: [dev-asset, docs]
 ---
 
@@ -27,7 +27,6 @@ tags: [dev-asset, docs]
 - [ ] **VPE-004** [#4]: NAS I/O Optimization (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-005** [#9]: Containerized E2E Runner (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-006** [#10]: Spectral Analysis Validation (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
-- [ ] **VPE-008** [#14]: Dynamic Pitch-Shift Strategy Selection (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-009** [#15]: Post-Processing Fidelity Validation (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-011** [#21]: Dynamic Context Timeout Bounding (Ref: [VPE-010](.agent/docs/gap-analysis/task-post-mortem/VPE-010.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-012** [#22]: Headless / Daemon Log Redirection (Ref: [VPE-010](.agent/docs/gap-analysis/task-post-mortem/VPE-010.md)) #status:brainstorm #priority:medium
@@ -38,3 +37,6 @@ tags: [dev-asset, docs]
 - [ ] **VPE-021** [#??]: Cover Art Preservation (Ref: [VPE-019](.agent/docs/gap-analysis/task-post-mortem/VPE-019.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-022** [#35]: Go-Native FLAC Parsing Migration (Ref: [VPE-020](.agent/docs/gap-analysis/task-post-mortem/VPE-020.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-023** [#36]: Zero-Copy Syscall Optimizations (Ref: [VPE-020](.agent/docs/gap-analysis/task-post-mortem/VPE-020.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-024** [#38]: Strategy Extensibility via YAML Configuration (Ref: [VPE-008](.agent/docs/gap-analysis/task-post-mortem/VPE-008.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-025** [#39]: Metadata Byte-Level Parity Audit (Ref: [VPE-008](.agent/docs/gap-analysis/task-post-mortem/VPE-008.md)) #status:brainstorm #priority:medium
+- [ ] **VPE-026** [#40]: Distributed Batch Orchestration (Ref: [VPE-008](.agent/docs/gap-analysis/task-post-mortem/VPE-008.md)) #status:brainstorm #priority:medium
