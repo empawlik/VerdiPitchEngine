@@ -11,9 +11,9 @@ platform: qnap
 tech_stack: [go, ffmpeg]
 dependencies: []
 created: 2026-05-09
-updated: 2026-05-10
+updated: 2026-05-11
 tags: [audio, dsp]
-body_hash: b13fccd893cbff41
+body_hash: 5bde0f69f546aa16
 ---
 # Verdi Pitch Engine
 
@@ -60,18 +60,18 @@ Open the **Execute** terminal for the `verdi-pitch-engine` container inside your
 
 You can provide full QNAP absolute paths:
 ```bash
-verdi-process "/share/Multimedia/Audio/Music/Artist/Nightmares on Wax/Smokers Delight"
+verdi-process "/share/Multimedia/Audio/Music/Artist/Nightmares on Wax/Smokers Delight" [strategy]
 ```
 
 Or utilize the ultra-fast relative pathing (automatically maps to your music root):
 ```bash
-verdi-process "Artist/Nightmares on Wax/Smokers Delight"
+verdi-process "Artist/Nightmares on Wax/Smokers Delight" [strategy]
 ```
 
 The orchestration wrapper will:
 1. Move your original 440 Hz master files into a hidden backup directory (e.g., `.` prefix).
 2. Enforce the `440 Hz` version tag on the master backup tracks.
-3. Perform duration-preserving 432 Hz pitch shifting via the Go engine directly into the original directory path.
+3. Perform duration-preserving (or phase-perfect `asetrate`) 432 Hz pitch shifting via the Go engine directly into the original directory path. The default strategy is `rubberband`.
 4. Auto-migrate your cover art, PDFs, and lyrics files to the new 432 Hz output.
 5. Clone the exact filesystem timestamps (ModTime/AccessTime) from the original directory to ensure Roon retains all playlists and "Date Added" flags without recognizing duplicates.
 
@@ -79,7 +79,7 @@ The orchestration wrapper will:
 If you want to process massive chunks of your library in an automated queue, use the new `verdi-batch` orchestration script.
 
 ```bash
-verdi-batch "Artist" 10
+verdi-batch "Artist" 10 [strategy]
 ```
 
 The batch engine will natively:

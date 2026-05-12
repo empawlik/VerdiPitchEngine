@@ -11,15 +11,14 @@ platform: "CLI"
 tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
-updated: 2026-05-10
-body_hash: 8f01937dcc15e008
+updated: 2026-05-11
+body_hash: 9b8420d195fff108
 tags: [dev-asset, docs]
 ---
 
 # VerdiPitchEngine Backlog
 
 ## Active Tasks
-- [ ] **VPE-008** [#14]: Dynamic Pitch-Shift Strategy Selection (Ref: [VPE-007](.agent/docs/gap-analysis/task-post-mortem/VPE-007.md)) #status:in-progress #priority:medium
 
 ## Icebox
 
