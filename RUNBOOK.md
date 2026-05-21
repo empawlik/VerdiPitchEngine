@@ -11,7 +11,7 @@ platform: qnap
 tech_stack: [go, ffmpeg]
 dependencies: []
 created: 2026-05-09
-updated: 2026-05-11
+updated: 2026-05-21
 tags: [audio, dsp]
 body_hash: c9cc430b9b939ea3
 ---

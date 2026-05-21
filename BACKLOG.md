@@ -11,19 +11,19 @@ platform: "CLI"
 tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
-updated: 2026-05-11
-body_hash: 1df0885a6c28bea4
+updated: 2026-05-21
+body_hash: 2cf77f888e5cc8f1
 tags: [dev-asset, docs]
 ---
 
 # VerdiPitchEngine Backlog
 
 ## Active Tasks
+- [ ] **VPE-003** [#3]: OpenBrain Telemetry Subsystem (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:in-progress #priority:medium
 
 ## Icebox
 
 ### Unsorted Operations
-- [ ] **VPE-003** [#3]: OpenBrain Telemetry Subsystem (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-004** [#4]: NAS I/O Optimization (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-005** [#9]: Containerized E2E Runner (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
 - [ ] **VPE-006** [#10]: Spectral Analysis Validation (Ref: [VPE-002](.agent/docs/gap-analysis/task-post-mortem/VPE-002.md)) #status:brainstorm #priority:medium
