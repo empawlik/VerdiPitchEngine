@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-21
-body_hash: aa21cd3ba24c65fd
+body_hash: 2f958bbba3097c13
 tags: [dev-asset, docs, completed-tasks]
 ---
 
@@ -53,7 +53,7 @@ tags: [dev-asset, docs, completed-tasks]
 ### [x] VPE-020: Metaflac Injection Pipeline
 - **Status:** Completed
 - **Description:** Shifted metadata injection from FFmpeg to `metaflac` byte-copy buffers to achieve true 1:1 metadata parity (preserving MusicBrainz tags and custom PICTURE blocks). Mitigated concurrent OS pipe deadlocks using bounded `bytes.Buffer` execution and resolved Roon's `inotify` race condition by explicitly executing `os.Chtimes` before atomic renames and across all supplemental filesystem artifacts.
-- **GitHub Issue:** #??
+- **GitHub Issue:** #45
 
 ### [x] VPE-008: Dynamic Pitch-Shift Strategy Selection
 - **Status:** Completed
