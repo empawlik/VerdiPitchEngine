@@ -195,7 +195,7 @@ func Vulncheck() error {
 // Lint runs linters using strict .golangci.yml.
 func Lint() error {
 	fmt.Println("Running linters...")
-	if err := sh.RunV("golangci-lint", "run", "./..."); err != nil {
+	if err := sh.RunV("golangci-lint", "run", "--timeout", "5m", "./..."); err != nil {
 		fmt.Println("golangci-lint failed or not installed. Install with: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest")
 		return err
 	}
