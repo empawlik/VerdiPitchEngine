@@ -60,12 +60,12 @@ func WalkAndCollect(inDir, outDir string) ([]Task, error) {
 			// Copy non-FLAC files (e.g., folder.jpg, cover.png, .pdf) natively
 			inF, err := os.Open(path)
 			if err == nil {
-				defer inF.Close()
+				defer func() { _ = inF.Close() }()
 				outF, err := os.Create(outPath)
 				if err == nil {
 					// Use io.Copy to handle potentially large PDFs or images efficiently
 					_, _ = io.Copy(outF, inF)
-					outF.Close() // Close early before Chtimes
+					_ = outF.Close() // Close early before Chtimes
 
 					// Preserve timestamps on non-FLAC files
 					if info, err := inF.Stat(); err == nil {

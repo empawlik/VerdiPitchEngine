@@ -18,8 +18,8 @@ func createDummyFlac(t *testing.T, path string) {
 func TestProcessFile_Integration(t *testing.T) {
 	inPath := "test_in.flac"
 	outPath := "test_out.flac"
-	defer os.Remove(inPath)
-	defer os.Remove(outPath)
+	defer func() { _ = os.Remove(inPath) }()
+	defer func() { _ = os.Remove(outPath) }()
 
 	createDummyFlac(t, inPath)
 
@@ -38,7 +38,7 @@ func TestProcessFile_Integration(t *testing.T) {
 
 func TestMetadataExtractors_Integration(t *testing.T) {
 	inPath := "test_meta.flac"
-	defer os.Remove(inPath)
+	defer func() { _ = os.Remove(inPath) }()
 
 	createDummyFlac(t, inPath)
 
@@ -135,15 +135,15 @@ func TestHelperProcess(t *testing.T) {
 	if command == "ffprobe" {
 		for _, arg := range args[cmdIndex:] {
 			if arg == "format=duration" {
-				os.Stdout.WriteString("120.5\n")
+				_, _ = os.Stdout.WriteString("120.5\n")
 				os.Exit(0)
 			}
 			if arg == "stream=sample_rate" {
-				os.Stdout.WriteString("48000\n")
+				_, _ = os.Stdout.WriteString("48000\n")
 				os.Exit(0)
 			}
 			if arg == "stream=bits_per_sample,bits_per_raw_sample,sample_fmt" {
-				os.Stdout.WriteString("24\n")
+				_, _ = os.Stdout.WriteString("24\n")
 				os.Exit(0)
 			}
 		}
@@ -151,7 +151,7 @@ func TestHelperProcess(t *testing.T) {
 	}
 
 	if command == "ffmpeg" {
-		os.Stdout.WriteString("out_time_us=1000000\n")
+		_, _ = os.Stdout.WriteString("out_time_us=1000000\n")
 		os.Exit(0)
 	}
 	os.Exit(0)
@@ -191,8 +191,8 @@ func TestProcessFile_MockedSuccess(t *testing.T) {
 	if err := os.WriteFile(tmpOutPath, []byte("fake"), 0644); err != nil {
 		t.Fatalf("Failed to create dummy temp file: %v", err)
 	}
-	defer os.Remove(outPath)
-	defer os.Remove(tmpOutPath)
+	defer func() { _ = os.Remove(outPath) }()
+	defer func() { _ = os.Remove(tmpOutPath) }()
 
 	err := ProcessFile(context.Background(), inPath, outPath, "rubberband", nil)
 	if err != nil {

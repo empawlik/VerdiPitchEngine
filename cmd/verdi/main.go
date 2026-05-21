@@ -95,7 +95,7 @@ func main() {
 	logFilePath := "/music/verdi-conversion.log"
 	f, logErr := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if logErr == nil {
-		defer f.Close()
+		defer func() { _ = f.Close() }()
 		logEntry := fmt.Sprintf("[%s] TARGET: %s | ALBUMS: %d | PROCESSED: %d | SKIPPED: %d | ERRORS: %d | TIME: %s\n",
 			time.Now().Format(time.RFC3339),
 			inDir, numAlbums,

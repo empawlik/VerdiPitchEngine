@@ -230,15 +230,19 @@ func ProcessFile(ctx context.Context, inPath, outPath, strategy string, bar *mpb
 			}
 		}
 	}
+	if err := scanner.Err(); err != nil {
+		_ = os.Remove(tmpOutPath)
+		return fmt.Errorf("reading ffmpeg stdout failed: %w", err)
+	}
 
 	if err := cmd.Wait(); err != nil {
-		os.Remove(tmpOutPath) // cleanup partial file
+		_ = os.Remove(tmpOutPath) // cleanup partial file
 		return fmt.Errorf("ffmpeg failed: %w, stderr: %s", err, stderr.String())
 	}
 
 	// Inject 1:1 metadata parity using metaflac
 	if err := inheritMetadata(ctx, inPath, tmpOutPath); err != nil {
-		os.Remove(tmpOutPath)
+		_ = os.Remove(tmpOutPath)
 		return fmt.Errorf("metadata inheritance failed: %w", err)
 	}
 

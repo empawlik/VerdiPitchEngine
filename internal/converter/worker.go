@@ -78,7 +78,7 @@ func RunPool(tasks []fs.Task, numWorkers int, strategy string) (int32, int32, in
 				if err := ProcessFile(ctx, task.InputPath, task.OutputPath, strategy, bar); err != nil {
 					atomic.AddInt32(&errors, 1)
 					log.Printf("❌ [Worker %d] Error processing %s: %v", workerID, task.InputPath, err)
-					os.Remove(task.OutputPath)
+					_ = os.Remove(task.OutputPath)
 					bar.Abort(true)
 				} else {
 					atomic.AddInt32(&processed, 1)

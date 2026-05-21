@@ -158,7 +158,7 @@ func Deps() error {
 // Fmt formats code.
 func Fmt() error {
 	fmt.Println("Formatting code...")
-	if err := sh.RunV(Go, "fmt", "./cmd/...", "./internal/..."); err != nil {
+	if err := sh.RunV(Go, "fmt", "./cmd/...", "./internal/...", "./pkg/..."); err != nil {
 		return err
 	}
 	fmt.Println("Formatting complete!")
@@ -168,7 +168,7 @@ func Fmt() error {
 // Vet runs go vet.
 func Vet() error {
 	fmt.Println("Running go vet...")
-	if err := sh.RunV(Go, "vet", "./cmd/...", "./internal/..."); err != nil {
+	if err := sh.RunV(Go, "vet", "./cmd/...", "./internal/...", "./pkg/..."); err != nil {
 		return err
 	}
 	fmt.Println("Vet complete!")
@@ -206,7 +206,7 @@ func Lint() error {
 // Test runs all tests.
 func Test() error {
 	fmt.Println("Running tests...")
-	if err := sh.RunV(Go, "test", "-v", "-race", "-coverprofile=coverage.out", "./cmd/...", "./internal/..."); err != nil {
+	if err := sh.RunV(Go, "test", "-v", "-race", "-coverprofile=coverage.out", "./cmd/...", "./internal/...", "./pkg/..."); err != nil {
 		return err
 	}
 	if err := sh.RunV(Go, "tool", "cover", "-html=coverage.out", "-o", "coverage.html"); err != nil {
@@ -219,7 +219,7 @@ func Test() error {
 // CiTest runs tests without race detector for CI speed.
 func CiTest() error {
 	fmt.Println("Running CI tests...")
-	return sh.RunV(Go, "test", "-v", "-coverprofile=coverage.out", "./cmd/...", "./internal/...")
+	return sh.RunV(Go, "test", "-v", "-coverprofile=coverage.out", "./cmd/...", "./internal/...", "./pkg/...")
 }
 
 // CheckCoverage enforces test coverage minimum targets across the workspace.
