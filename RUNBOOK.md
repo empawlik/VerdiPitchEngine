@@ -11,9 +11,9 @@ platform: qnap
 tech_stack: [go, ffmpeg]
 dependencies: []
 created: 2026-05-09
-updated: 2026-05-11
+updated: 2026-05-21
 tags: [audio, dsp]
-body_hash: c9cc430b9b939ea3
+body_hash: eec16997fe9ced56
 ---
 # Verdi Pitch Engine Runbook
 
@@ -95,3 +95,31 @@ verdi-batch "Artist" 10 [strategy]
 # Process ALL pending albums in the directory (limit omitted or set to 'all')
 verdi-batch "Artist" all [strategy]
 ```
+
+## Telemetry & Vertex AI Client
+
+The system includes a Vertex AI client under `pkg/ai` designed to provide observability and verification checks on the telemetry pipeline.
+
+### Prerequisites
+
+To execute the telemetry agent run:
+1. Ensure you have a Google Cloud Service Account JSON file with Vertex AI User role permissions.
+2. Define the path to your credentials in the environment or directly within your local telemetry runner.
+
+### Code Invocation
+
+To verify connection and generate telemetry validation, invoke the package's agent function:
+```go
+import (
+	"context"
+	"github.com/empawlik/verdi-pitch-engine/pkg/ai"
+)
+
+func main() {
+	ctx := context.Background()
+	if err := ai.RunAgent(ctx); err != nil {
+		log.Fatalf("Telemetry agent check failed: %v", err)
+	}
+}
+```
+

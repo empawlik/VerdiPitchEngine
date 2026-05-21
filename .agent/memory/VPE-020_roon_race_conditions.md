@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-10"
-updated: 2026-05-10
+updated: 2026-05-21
 body_hash: 665ea34e3c0afe28
 tags: [dev-asset, memory, roon, inotify, deadlock]
 ---

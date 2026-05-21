@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell", "ffmpeg", "Docker"]
 dependencies: []
 created: "2026-05-10"
-updated: 2026-05-10
+updated: 2026-05-21
 tags: [dev-asset, memory, technical, architecture, docker]
 body_hash: 1f67bae32f4314fe
 ---

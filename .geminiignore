@@ -1,0 +1,23 @@
+# Ignore large documentation and history files to preserve Gemini context window and prevent 429 quota errors
+CHANGELOG.md
+RELEASES.md
+RELEASES-PRODUCT.md
+BACKLOG.md
+
+# Ignore heavy internal tracking and logging folders
+.agent/docs/gap-analysis/task-post-mortem/
+.agent/docs/gap-analysis/task-validate/
+
+# Ignore heavy archives, temp data, and external vendor knowledge
+.agent/tmp/
+.agent/archive/
+.agent/knowledge/vendor/
+
+# Ignore assets (images/binaries)
+assets/
+
+# Ignore test reports and scratchpads
+src/reports/
+src/scratch/
+coverage.html
+coverage.out

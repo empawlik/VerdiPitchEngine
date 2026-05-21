@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: [markdown]
 dependencies: []
 created: "2026-05-11"
-updated: 2026-05-11
+updated: 2026-05-21
 tags: [dev-asset, memory, vpe-008, technical]
 body_hash: bafa59f9af38919f
 ---

@@ -11,7 +11,7 @@ platform: CLI
 tech_stack: [markdown]
 dependencies: []
 created: "2026-05-11"
-updated: 2026-05-11
+updated: 2026-05-21
 tags: [dev-asset, session, vpe-008]
 body_hash: ab852f39c7f02de8
 ---

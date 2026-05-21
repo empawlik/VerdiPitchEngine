@@ -11,7 +11,7 @@ platform: "CLI"
 tech_stack: ["Go", "Shell"]
 dependencies: []
 created: "2026-04-26"
-updated: 2026-05-10
+updated: 2026-05-21
 body_hash: e0845081fb0e86a2
 tags: [architecture, domain-map, logic, definitions]
 ---
