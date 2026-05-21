@@ -12,7 +12,7 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-21
-body_hash: e22a6e3ea4a9d093
+body_hash: aa21cd3ba24c65fd
 tags: [dev-asset, docs, completed-tasks]
 ---
 
@@ -59,3 +59,8 @@ tags: [dev-asset, docs, completed-tasks]
 - **Status:** Completed
 - **Description:** Implemented dynamic pitch-shift strategy selection (`rubberband` vs `asetrate`), enabling phase-perfect audio preservation. Updated orchestration scripts to thread the strategy flag and gracefully ignore QNAP-specific hidden metadata directories to prevent fatal crashes during execution. Overhauled timestamps handling to perfectly mirror origin creation dates, fully shielding converted FLACs from triggering Roon's "Recently Added" flag.
 - **GitHub Issue:** #14
+
+### [x] VPE-003: OpenBrain Telemetry Subsystem
+- **Status:** Completed
+- **Description:** Implemented the Vertex AI telemetry client under pkg/ai/client.go to establish a high-assurance telemetry observation pipeline. Added .geminiignore to prevent context window bloat and 429 quota exhaustion. Resolved unhandled scanner.Err() and unhandled defer close/remove returns across internal/converter and walker to prevent resource leaks and guarantee strict error propagation.
+- **GitHub Issue:** #3

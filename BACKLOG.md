@@ -12,14 +12,14 @@ tech_stack: ["Go", "Shell", "ffmpeg"]
 dependencies: []
 created: "2026-05-09"
 updated: 2026-05-21
-body_hash: 2cf77f888e5cc8f1
+body_hash: 971a88dce54ccf28
 tags: [dev-asset, docs]
 ---
 
 # VerdiPitchEngine Backlog
 
 ## Active Tasks
-- [ ] **VPE-003** [#3]: OpenBrain Telemetry Subsystem (Ref: [VPE-001](.agent/docs/gap-analysis/task-post-mortem/VPE-001.md)) #status:in-progress #priority:medium
+
 
 ## Icebox
 
