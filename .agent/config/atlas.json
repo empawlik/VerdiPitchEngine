@@ -1,0 +1,5 @@
+{
+  "atlas_db_path": "/Users/epawlik/Dev/Workspace/atlas/.atlas-data/atlas_index.db",
+  "container_name": "atlas-daemon",
+  "required_vendors": ["Go", "gRPC", "Protobuf", "AWS"]
+}

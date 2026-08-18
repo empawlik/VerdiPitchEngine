@@ -1,0 +1,19 @@
+{
+  "default_target": 80.0,
+  "excludes": [
+    "cmd/",
+    "scripts/",
+    "internal/mocks",
+    "pkg/proto",
+    "api/proto"
+  ],
+  "package_targets": {
+    "pkg/strategy": 80.0,
+    "pkg/command": 80.0,
+    "pkg/orchestration": 80.0,
+    "pkg/client/geetwee": 80.0,
+    "internal/config": 80.0,
+    "pkg/audit": 100.0,
+    "pkg/guardrail": 95.0
+  }
+}

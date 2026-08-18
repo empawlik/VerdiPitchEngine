@@ -1,0 +1,6 @@
+{
+  "task_id_prefixes": ["ARC", "AGV", "G2E", "OPB", "LOTUS", "PRX", "IGR", "TASK", "GAP", "KRS", "LRN"],
+  "backlog_path": "./BACKLOG.md",
+  "completed_path": "./COMPLETED.md",
+  "abandoned_path": "./ABANDONED.md"
+}
